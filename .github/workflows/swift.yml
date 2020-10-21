@@ -28,6 +28,9 @@ jobs:
        
     - name: Linting
       run: make lint; make check-format
+
+    - name: pod install
+      run: make pod-install
       
     - name: Run tests
       run: make test
