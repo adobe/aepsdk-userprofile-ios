@@ -1,0 +1,38 @@
+name: Swift
+
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ dev ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Select Xcode 11.3
+      run: sudo xcode-select -switch /Applications/Xcode_11.3.app
+
+    - name: Xcode version
+      run: /usr/bin/xcodebuild -version
+
+    - name: Install swiftformat
+      run: brew install swiftformat
+
+    - name: Install SwiftLint
+      run: brew install swiftlint
+       
+    - name: Linting
+      run: make lint; make check-format
+      
+    - name: Run tests
+      run: make test
+
+    - name: Upload Code Coverage 
+      run: make generate-lcov; bash <(curl -s https://codecov.io/bash)  
+       
+     
