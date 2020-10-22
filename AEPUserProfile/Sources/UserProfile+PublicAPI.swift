@@ -25,7 +25,11 @@ import Foundation
     ///   - attributeName: the attribute's key
     ///   - attributeValue: the attribute's value
     static func updateUserAttribute(attributeName: String, attributeValue: String?) {
-        updateUserAttributes(attributeDict: [attributeName: attributeValue as Any])
+        guard let value = attributeValue else {
+            removeUserAttribute(attributeName: attributeName)
+            return
+        }
+        updateUserAttributes(attributeDict: [attributeName: value as Any])
     }
 
     ///  Called by the public API to update user attributes.
