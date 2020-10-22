@@ -14,8 +14,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Select Xcode 11.3
-      run: sudo xcode-select -switch /Applications/Xcode_11.3.app
+    - name: Select Xcode 11.7
+      run: sudo xcode-select -switch /Applications/Xcode_11.7.app
 
     - name: Xcode version
       run: /usr/bin/xcodebuild -version

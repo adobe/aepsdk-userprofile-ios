@@ -1,42 +1,42 @@
 PODS:
-  - AEPCore (0.0.1):
+  - AEPCore (3.0.0-beta.1):
     - AEPRulesEngine
     - AEPServices
   - AEPRulesEngine (0.0.1)
-  - AEPServices (0.0.1)
+  - AEPServices (3.0.0-beta.1)
 
 DEPENDENCIES:
-  - "AEPCore (from `git@github.com:adobe/aepsdk-core-ios.git`, branch `main`)"
-  - "AEPRulesEngine (from `git@github.com:adobe/aepsdk-rulesengine-ios.git`, branch `main`)"
-  - "AEPServices (from `git@github.com:adobe/aepsdk-core-ios.git`, branch `main`)"
+  - AEPCore (from `https://github.com/adobe/aepsdk-core-ios.git`, branch `main`)
+  - AEPRulesEngine (from `https://github.com/adobe/aepsdk-rulesengine-ios.git`, branch `main`)
+  - AEPServices (from `https://github.com/adobe/aepsdk-core-ios.git`, branch `main`)
 
 EXTERNAL SOURCES:
   AEPCore:
     :branch: main
-    :git: "git@github.com:adobe/aepsdk-core-ios.git"
+    :git: https://github.com/adobe/aepsdk-core-ios.git
   AEPRulesEngine:
     :branch: main
-    :git: "git@github.com:adobe/aepsdk-rulesengine-ios.git"
+    :git: https://github.com/adobe/aepsdk-rulesengine-ios.git
   AEPServices:
     :branch: main
-    :git: "git@github.com:adobe/aepsdk-core-ios.git"
+    :git: https://github.com/adobe/aepsdk-core-ios.git
 
 CHECKOUT OPTIONS:
   AEPCore:
-    :commit: d58558f0b7b135e77572c642cf34370d0442587d
-    :git: "git@github.com:adobe/aepsdk-core-ios.git"
+    :commit: 3148f94f930bd21c0caabc7b3dc4db53ff9ba281
+    :git: https://github.com/adobe/aepsdk-core-ios.git
   AEPRulesEngine:
     :commit: 8815389caf92bd8886b72e9e4e1cb05176cb2767
-    :git: "git@github.com:adobe/aepsdk-rulesengine-ios.git"
+    :git: https://github.com/adobe/aepsdk-rulesengine-ios.git
   AEPServices:
-    :commit: d58558f0b7b135e77572c642cf34370d0442587d
-    :git: "git@github.com:adobe/aepsdk-core-ios.git"
+    :commit: 3148f94f930bd21c0caabc7b3dc4db53ff9ba281
+    :git: https://github.com/adobe/aepsdk-core-ios.git
 
 SPEC CHECKSUMS:
-  AEPCore: e8ddaae01a787926fde35cfcc24770b26a765e58
+  AEPCore: d4b8b2ac2d5d91ea11c4535bc574bb31e684b83c
   AEPRulesEngine: 5742652bd7ab65aa7325f731725d995947e41db8
-  AEPServices: ad642c76cede1c7babb61e6804198ded4317d74f
+  AEPServices: d5c727ccaba06c0e7149b7bf4baebcd5f5c0f7e8
 
-PODFILE CHECKSUM: d91a9eb114b04adbcaffbfe8f0234776efcaaeda
+PODFILE CHECKSUM: 7137a6a3f5d88b2815eb8a3113704e8ee8298b61
 
 COCOAPODS: 1.9.3
