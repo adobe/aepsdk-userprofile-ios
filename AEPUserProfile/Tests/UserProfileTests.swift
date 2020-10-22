@@ -166,35 +166,6 @@ class UserProfileTests: XCTestCase {
         XCTAssertEqual(["key1": "value1", "key2": "value2", "key3": "value3"], attributes)
     }
 
-    func testUpdateAttributesWithNilValue() throws {
-        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
-        let runtime = TestableExtensionRuntime()
-        let profile = UserProfile(runtime: runtime)
-        profile.onRegistered()
-        XCTAssertEqual(1, runtime.createdSharedStates.count)
-        runtime.createdSharedStates.removeAll()
-
-        guard let handleRequestProfile = runtime.listeners["\(EventType.userProfile)-\(EventSource.requestProfile)"] else {
-            XCTFail()
-            return
-        }
-        let event = Event(name: "UserProfileUpdate", type: "com.adobe.eventType.userProfile", source: "com.adobe.eventSource.requestProfile", data: ["userprofileupdatekey": ["key2": nil]])
-        XCTAssert(event.isUpdateAttributesEvent)
-        handleRequestProfile(event)
-        guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
-            XCTFail()
-            return
-        }
-        XCTAssertEqual(1, storedAttributes.count)
-        XCTAssertEqual(["key1": "value1"], storedAttributes)
-        XCTAssertEqual(1, runtime.createdSharedStates.count)
-        guard let attributes = runtime.createdSharedStates[0]?["userprofiledata"] as? [String: String] else {
-            XCTFail()
-            return
-        }
-        XCTAssertEqual(["key1": "value1"], attributes)
-    }
-
     func testUpdateAttributesWithMultipleValueTypes() throws {
         UserDefaults.standard.set(["k_string": "value1", "k_int": 2, "k_bool": true, "k_double": 2.1], forKey: "Adobe.com.adobe.module.userProfile.attributes")
         let runtime = TestableExtensionRuntime()
@@ -232,36 +203,31 @@ class UserProfileTests: XCTestCase {
         XCTAssertEqual(2.1, attributes["k_double"] as? Double)
     }
 
-//    func testUpdateAttributesWithUnacceptedValue() throws {
-//        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
-//        let runtime = TestableExtensionRuntime()
-//        let profile = UserProfile(runtime: runtime)
-//        profile.onRegistered()
-//        XCTAssertEqual(1, runtime.createdSharedStates.count)
-//        runtime.createdSharedStates.removeAll()
-//
-//        guard let handleRequestProfile = runtime.listeners["\(EventType.userProfile)-\(EventSource.requestProfile)"] else {
-//            XCTFail()
-//            return
-//        }
-//        let event = Event(name: "UserProfileUpdate", type: "com.adobe.eventType.userProfile", source: "com.adobe.eventSource.requestProfile", data: ["userprofileupdatekey": ["key2": UserProfile(runtime: TestableExtensionRuntime())]])
-//        XCTAssert(event.isUpdateAttributesEvent)
-//
-//        handleRequestProfile(event)
-//
-//        guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
-//            XCTFail()
-//            return
-//        }
-//        XCTAssertEqual(1, storedAttributes.count)
-//        XCTAssertEqual(["key1": "value1"], storedAttributes)
-//        XCTAssertEqual(1, runtime.createdSharedStates.count)
-//        guard let attributes = runtime.createdSharedStates[0]?["userprofiledata"] as? [String: String] else {
-//            XCTFail()
-//            return
-//        }
-//        XCTAssertEqual(["key1": "value1"], attributes)
-//    }
+    func testUpdateAttributesWithUnacceptedValue() throws {
+        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        let runtime = TestableExtensionRuntime()
+        let profile = UserProfile(runtime: runtime)
+        profile.onRegistered()
+        XCTAssertEqual(1, runtime.createdSharedStates.count)
+        runtime.createdSharedStates.removeAll()
+
+        guard let handleRequestProfile = runtime.listeners["\(EventType.userProfile)-\(EventSource.requestProfile)"] else {
+            XCTFail()
+            return
+        }
+        let event = Event(name: "UserProfileUpdate", type: "com.adobe.eventType.userProfile", source: "com.adobe.eventSource.requestProfile", data: ["userprofileupdatekey": ["key1": "valuex", "key2": UserProfile(runtime: TestableExtensionRuntime())]])
+        XCTAssert(event.isUpdateAttributesEvent)
+
+        handleRequestProfile(event)
+
+        guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(2, storedAttributes.count)
+        XCTAssertEqual(["key1": "value1", "key2": "value2"], storedAttributes)
+        XCTAssertEqual(0, runtime.createdSharedStates.count)
+    }
 
     func testGetAttributes() throws {
         UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")

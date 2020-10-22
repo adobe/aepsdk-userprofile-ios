@@ -95,6 +95,11 @@ public class UserProfile: NSObject, Extension {
             return
         }
 
+        guard isPropertyListObject(object: newAttributes) else {
+            Log.debug(label: UserProfile.LOG_TAG, "Unable to process the update attributes event: provided user attributes contain non-property-list objects")
+            return
+        }
+
         for (key, value) in newAttributes {
             switch value {
             case Optional<Any>.none:
@@ -163,5 +168,15 @@ public class UserProfile: NSObject, Extension {
     private func createSharedState(event: Event? = nil) {
         let sharedStateData = [UserProfileConstants.UserProfile.EventDataKeys.USERPROFILE_DATA_KEY: attributes]
         createSharedState(data: sharedStateData as [String: Any], event: event)
+    }
+
+    private func isPropertyListObject(object: Any) -> Bool {
+        do {
+            _ = try PropertyListSerialization.data(fromPropertyList: object, format: .xml, options: PropertyListSerialization.WriteOptions())
+            return true
+        } catch {
+            Log.debug(label: UserProfile.LOG_TAG, "\(object) is a non-property-list object ")
+            return false
+        }
     }
 }

@@ -31,7 +31,6 @@ import Foundation
     ///  Called by the public API to update user attributes.
     ///  If the attribute does not exist, it will be created.
     ///  If the attribute already exists, then the value will be updated.
-    ///  A nil attribute value will remove the attribute.
     ///
     /// - Parameter attributeDict: the dictionary containing attribute key-value pairs
     static func updateUserAttributes(attributeDict: [String: Any]) {
@@ -39,6 +38,7 @@ import Foundation
             Log.trace(label: LOG_TAG, "updateUserAttributes - dictionary was empty, no event was dispatched")
             return
         }
+
         let eventData = [UserProfileConstants.UserProfile.EventDataKeys.UPDATE_DATA_KEY: attributeDict]
         let event = Event(name: "UserProfileUpdate", type: EventType.userProfile, source: EventSource.requestProfile, data: eventData)
         MobileCore.dispatch(event: event)
