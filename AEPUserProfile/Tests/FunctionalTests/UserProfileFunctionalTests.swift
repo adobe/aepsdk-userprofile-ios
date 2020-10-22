@@ -22,49 +22,60 @@ class UserProfileFunctionalTests: XCTestCase {
 
     override class func setUp() {
         super.setUp()
-        MobileCore.setLogLevel(level: .debug)
+        MobileCore.setLogLevel(.debug)
     }
 
     override func setUpWithError() throws {
+        EventHub.shared = EventHub()
         UserDefaults.standard.removeObject(forKey: "Adobe.com.adobe.module.userProfile.attributes")
     }
 
-    override func tearDownWithError() throws {
-        usleep(1000)
-    }
+    override func tearDownWithError() throws {}
 
-    func testExtensionRegistrationWillCreateSharedState() throws {
+    func testExtensionRegistrationWillCreateSharedStateWithEmptyAttributes() throws {
         // Given
         theExpectation = expectation(description: "monitor the shared state from UserProfile")
-        MonitorExtension.profileSharedStateReceiver = sharedStateReceiverEmpty
+        MonitorExtension.profileSharedStateReceiver = { _ in
+            guard let data = MonitorExtension.instance?.userProfileSharedStateData?["userprofiledata"] as? [String: String] else {
+                return
+            }
+            XCTAssertEqual(0, data.count)
+            self.theExpectation?.fulfill()
+            MonitorExtension.profileSharedStateReceiver = nil
+        }
 
         // When
         MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {}
 
         // Then
         waitForExpectations(timeout: 3)
-        MobileCore.unregisterExtension(UserProfile.self)
-        MobileCore.unregisterExtension(MonitorExtension.self)
+    }
 
-        usleep(5000)
-
+    func testExtensionRegistrationWillCreateSharedState() throws {
         UserDefaults.standard.set(["key1": "value1"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
         theExpectation = expectation(description: "monitor the shared state from UserProfile")
-        MonitorExtension.profileSharedStateReceiver = sharedStateReceiver
+        MonitorExtension.profileSharedStateReceiver = { _ in
+            guard let data = MonitorExtension.instance?.userProfileSharedStateData?["userprofiledata"] as? [String: String] else {
+                return
+            }
+            XCTAssertEqual(1, data.count)
+            XCTAssertEqual(["key1": "value1"], data)
+            self.theExpectation?.fulfill()
+            MonitorExtension.profileSharedStateReceiver = nil
+        }
         MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {}
         waitForExpectations(timeout: 3)
-        MobileCore.unregisterExtension(UserProfile.self)
-        MobileCore.unregisterExtension(MonitorExtension.self)
     }
 
     func testUpdateUserAttributesWithAllSupportedTypes() throws {
         // Given
+//        EventHub.shared = EventHub()
         let expectation = self.expectation(description: "register UserProfile extension")
         UserDefaults.standard.set(["k1": "v1", "k4": 11], forKey: "Adobe.com.adobe.module.userProfile.attributes")
         MobileCore.registerExtensions([UserProfile.self]) {
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
 
         // When
         UserProfile.updateUserAttributes(attributeDict: ["k2": 2.1, "k3": 3, "k4": true])
@@ -73,19 +84,14 @@ class UserProfileFunctionalTests: XCTestCase {
         let expectGet = self.expectation(description: "getUserAttributes()")
         UserProfile.getUserAttributes(attributeNames: ["k1", "k2", "k3", "k4"]) {
             attributes, _ in
+            XCTAssertNotNil(attributes)
             expectGet.fulfill()
             XCTAssertEqual("v1", attributes?["k1"] as? String)
             XCTAssertEqual(2.1, attributes?["k2"] as? Double)
             XCTAssertEqual(3, attributes?["k3"] as? Int)
             XCTAssertEqual(true, attributes?["k4"] as? Bool)
-            let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: Any]
-            XCTAssertEqual("v1", storedAttributes?["k1"] as? String)
-            XCTAssertEqual(2.1, storedAttributes?["k2"] as? Double)
-            XCTAssertEqual(3, storedAttributes?["k3"] as? Int)
-            XCTAssertEqual(true, storedAttributes?["k4"] as? Bool)
-            MobileCore.unregisterExtension(UserProfile.self)
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
     }
 
     func testUpdateUserAttributesWithEmptyDict() throws {
@@ -95,7 +101,7 @@ class UserProfileFunctionalTests: XCTestCase {
         MobileCore.registerExtensions([UserProfile.self]) {
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
 
         // When
         UserProfile.updateUserAttributes(attributeDict: [:])
@@ -110,7 +116,7 @@ class UserProfileFunctionalTests: XCTestCase {
             XCTAssertEqual(["k1": "v1"], storedAttributes)
             MobileCore.unregisterExtension(UserProfile.self)
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
     }
 
     func testUpdateUserAttributeWithNilValue() throws {
@@ -120,7 +126,7 @@ class UserProfileFunctionalTests: XCTestCase {
         MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
 
         // When
         UserProfile.updateUserAttribute(attributeName: "k1", attributeValue: nil)
@@ -135,7 +141,7 @@ class UserProfileFunctionalTests: XCTestCase {
             XCTAssertEqual(["k2": "v2"], storedAttributes)
             MobileCore.unregisterExtension(UserProfile.self)
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
     }
 
     func testGetUserAttributesWithEmptyDict() throws {
@@ -145,7 +151,7 @@ class UserProfileFunctionalTests: XCTestCase {
         MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
 
         // When
         let expectGet = self.expectation(description: "getUserAttributes()")
@@ -159,7 +165,7 @@ class UserProfileFunctionalTests: XCTestCase {
         }
 
         // Then
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
     }
 
     func testRemoveUserAttribute() throws {
@@ -168,7 +174,7 @@ class UserProfileFunctionalTests: XCTestCase {
         MobileCore.registerExtensions([UserProfile.self]) {
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
 
         UserProfile.removeUserAttribute(attributeName: "k1")
 
@@ -177,11 +183,11 @@ class UserProfileFunctionalTests: XCTestCase {
             attributes, _ in
             expectGet.fulfill()
             XCTAssertEqual(["k2": "v2"], attributes as? [String: String])
-            let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String]
-            XCTAssertEqual(["k2": "v2"], storedAttributes)
+//            let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String]
+//            XCTAssertEqual(["k2": "v2"], storedAttributes)
             MobileCore.unregisterExtension(UserProfile.self)
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
     }
 
     func testRemoveUserAttributes() throws {
@@ -190,7 +196,7 @@ class UserProfileFunctionalTests: XCTestCase {
         MobileCore.registerExtensions([UserProfile.self]) {
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
 
         UserProfile.removeUserAttributes(attributeNames: ["k1", "k3"])
 
@@ -203,7 +209,7 @@ class UserProfileFunctionalTests: XCTestCase {
             XCTAssertEqual(["k2": "v2"], storedAttributes)
             MobileCore.unregisterExtension(UserProfile.self)
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
     }
 
     func testRemoveUserAttributesWithEmptyDict() throws {
@@ -212,7 +218,7 @@ class UserProfileFunctionalTests: XCTestCase {
         MobileCore.registerExtensions([UserProfile.self]) {
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
 
         UserProfile.removeUserAttributes(attributeNames: [])
 
@@ -225,7 +231,7 @@ class UserProfileFunctionalTests: XCTestCase {
             XCTAssertEqual(["k1": "v1", "k2": "v2"], storedAttributes)
             MobileCore.unregisterExtension(UserProfile.self)
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
     }
 
     func testRulesConsequenceEventOperationWrite() throws {
@@ -234,7 +240,7 @@ class UserProfileFunctionalTests: XCTestCase {
         MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
 
         theExpectation = self.expectation(description: "monitor the shared state from UserProfile")
         let event = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key3", "value": "value3", "operation": "write"]]])
@@ -252,7 +258,7 @@ class UserProfileFunctionalTests: XCTestCase {
         }
         MobileCore.dispatch(event: event)
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
 
         MobileCore.unregisterExtension(UserProfile.self)
         MobileCore.unregisterExtension(MonitorExtension.self)
@@ -264,7 +270,7 @@ class UserProfileFunctionalTests: XCTestCase {
         MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
 
         theExpectation = self.expectation(description: "monitor the shared state from UserProfile")
         let event = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key1", "operation": "delete"]]])
@@ -282,7 +288,7 @@ class UserProfileFunctionalTests: XCTestCase {
         }
         MobileCore.dispatch(event: event)
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
 
         MobileCore.unregisterExtension(UserProfile.self)
         MobileCore.unregisterExtension(MonitorExtension.self)
@@ -295,7 +301,7 @@ class UserProfileFunctionalTests: XCTestCase {
         MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
 
         MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["detail": ["key": "key3", "value": "value3", "operation": "write"]]]))
         MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["detail": ["key": "key1", "operation": "delete"]]]))
@@ -308,25 +314,6 @@ class UserProfileFunctionalTests: XCTestCase {
 
         MobileCore.unregisterExtension(UserProfile.self)
         MobileCore.unregisterExtension(MonitorExtension.self)
-    }
-
-    private func sharedStateReceiver(event _: Event) {
-        guard let data = MonitorExtension.instance?.userProfileSharedStateData?["userprofiledata"] as? [String: String] else {
-            return
-        }
-        XCTAssertEqual(1, data.count)
-        XCTAssertEqual(["key1": "value1"], data)
-        theExpectation?.fulfill()
-        MonitorExtension.profileSharedStateReceiver = nil
-    }
-
-    private func sharedStateReceiverEmpty(event _: Event) {
-        guard let data = MonitorExtension.instance?.userProfileSharedStateData?["userprofiledata"] as? [String: String] else {
-            return
-        }
-        XCTAssertEqual(0, data.count)
-        theExpectation?.fulfill()
-        MonitorExtension.profileSharedStateReceiver = nil
     }
 }
 
