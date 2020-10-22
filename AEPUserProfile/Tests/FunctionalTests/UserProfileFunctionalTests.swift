@@ -20,21 +20,19 @@ class UserProfileFunctionalTests: XCTestCase {
         return UserDefaults(suiteName: "com.adobe.mobile.datastore") ?? UserDefaults.standard
     }
 
-    override class func setUp() {
-        super.setUp()
-        MobileCore.setLogLevel(.debug)
-    }
-
     override func setUpWithError() throws {
-        EventHub.shared = EventHub()
+        MobileCore.setLogLevel(.trace)
         UserDefaults.standard.removeObject(forKey: "Adobe.com.adobe.module.userProfile.attributes")
     }
 
-    override func tearDownWithError() throws {}
+    override func tearDownWithError() throws {
+        EventHub.shared = EventHub()
+    }
 
     func testExtensionRegistrationWillCreateSharedStateWithEmptyAttributes() throws {
         // Given
         theExpectation = expectation(description: "monitor the shared state from UserProfile")
+        MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin"])
         MonitorExtension.profileSharedStateReceiver = { _ in
             guard let data = MonitorExtension.instance?.userProfileSharedStateData?["userprofiledata"] as? [String: String] else {
                 return
@@ -54,6 +52,7 @@ class UserProfileFunctionalTests: XCTestCase {
     func testExtensionRegistrationWillCreateSharedState() throws {
         UserDefaults.standard.set(["key1": "value1"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
         theExpectation = expectation(description: "monitor the shared state from UserProfile")
+        MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin"])
         MonitorExtension.profileSharedStateReceiver = { _ in
             guard let data = MonitorExtension.instance?.userProfileSharedStateData?["userprofiledata"] as? [String: String] else {
                 return
@@ -72,6 +71,7 @@ class UserProfileFunctionalTests: XCTestCase {
 //        EventHub.shared = EventHub()
         let expectation = self.expectation(description: "register UserProfile extension")
         UserDefaults.standard.set(["k1": "v1", "k4": 11], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin"])
         MobileCore.registerExtensions([UserProfile.self]) {
             expectation.fulfill()
         }
@@ -98,6 +98,7 @@ class UserProfileFunctionalTests: XCTestCase {
         // Given
         let expectation = self.expectation(description: "register UserProfile extension")
         UserDefaults.standard.set(["k1": "v1"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin"])
         MobileCore.registerExtensions([UserProfile.self]) {
             expectation.fulfill()
         }
@@ -123,6 +124,7 @@ class UserProfileFunctionalTests: XCTestCase {
         // Given
         let expectation = self.expectation(description: "register UserProfile extension")
         UserDefaults.standard.set(["k1": "v1", "k2": "v2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin"])
         MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {
             expectation.fulfill()
         }
@@ -148,6 +150,7 @@ class UserProfileFunctionalTests: XCTestCase {
         // Given
         let expectation = self.expectation(description: "register UserProfile extension")
         UserDefaults.standard.set(["k1": "v1", "k2": "v2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin"])
         MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {
             expectation.fulfill()
         }
@@ -171,6 +174,7 @@ class UserProfileFunctionalTests: XCTestCase {
     func testRemoveUserAttribute() throws {
         let expectation = self.expectation(description: "register UserProfile extension")
         UserDefaults.standard.set(["k1": "v1", "k2": "v2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin"])
         MobileCore.registerExtensions([UserProfile.self]) {
             expectation.fulfill()
         }
@@ -183,8 +187,6 @@ class UserProfileFunctionalTests: XCTestCase {
             attributes, _ in
             expectGet.fulfill()
             XCTAssertEqual(["k2": "v2"], attributes as? [String: String])
-//            let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String]
-//            XCTAssertEqual(["k2": "v2"], storedAttributes)
             MobileCore.unregisterExtension(UserProfile.self)
         }
         waitForExpectations(timeout: 2)
@@ -193,6 +195,7 @@ class UserProfileFunctionalTests: XCTestCase {
     func testRemoveUserAttributes() throws {
         let expectation = self.expectation(description: "register UserProfile extension")
         UserDefaults.standard.set(["k1": "v1", "k2": "v2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin"])
         MobileCore.registerExtensions([UserProfile.self]) {
             expectation.fulfill()
         }
@@ -205,9 +208,6 @@ class UserProfileFunctionalTests: XCTestCase {
             attributes, _ in
             expectGet.fulfill()
             XCTAssertEqual(["k2": "v2"], attributes as? [String: String])
-            let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String]
-            XCTAssertEqual(["k2": "v2"], storedAttributes)
-            MobileCore.unregisterExtension(UserProfile.self)
         }
         waitForExpectations(timeout: 2)
     }
@@ -215,6 +215,7 @@ class UserProfileFunctionalTests: XCTestCase {
     func testRemoveUserAttributesWithEmptyDict() throws {
         let expectation = self.expectation(description: "register UserProfile extension")
         UserDefaults.standard.set(["k1": "v1", "k2": "v2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin"])
         MobileCore.registerExtensions([UserProfile.self]) {
             expectation.fulfill()
         }
@@ -227,8 +228,6 @@ class UserProfileFunctionalTests: XCTestCase {
             attributes, _ in
             expectGet.fulfill()
             XCTAssertEqual(["k1": "v1", "k2": "v2"], attributes as? [String: String])
-            let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String]
-            XCTAssertEqual(["k1": "v1", "k2": "v2"], storedAttributes)
             MobileCore.unregisterExtension(UserProfile.self)
         }
         waitForExpectations(timeout: 2)
@@ -237,6 +236,7 @@ class UserProfileFunctionalTests: XCTestCase {
     func testRulesConsequenceEventOperationWrite() throws {
         UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
         let expectation = self.expectation(description: "register UserProfile extension")
+        MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin"])
         MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {
             expectation.fulfill()
         }
@@ -267,6 +267,7 @@ class UserProfileFunctionalTests: XCTestCase {
     func testRulesConsequenceEventOperationDelete() throws {
         UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
         let expectation = self.expectation(description: "register UserProfile extension")
+        MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin"])
         MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {
             expectation.fulfill()
         }
@@ -298,6 +299,7 @@ class UserProfileFunctionalTests: XCTestCase {
         MonitorExtension.sharedStateChanged = 0
         UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
         let expectation = self.expectation(description: "register UserProfile extension")
+        MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin"])
         MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {
             expectation.fulfill()
         }
