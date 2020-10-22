@@ -82,6 +82,33 @@ class UserProfileTests: XCTestCase {
         XCTAssertEqual(["key3": "value3"], attributes)
     }
 
+    func testHandleRulesEngineResponseForWriteWithEmptyStringValue() throws {
+        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        let runtime = TestableExtensionRuntime()
+        let profile = UserProfile(runtime: runtime)
+        profile.onRegistered()
+        XCTAssertEqual(1, runtime.createdSharedStates.count)
+        runtime.createdSharedStates.removeAll()
+        guard let handleRulesEngineResponse = runtime.listeners["\(EventType.rulesEngine)-\(EventSource.responseContent)"] else {
+            XCTFail()
+            return
+        }
+        let event = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key1", "value": "", "operation": "write"]]])
+        handleRulesEngineResponse(event)
+        guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(1, storedAttributes.count)
+        XCTAssertEqual(["key2": "value2"], storedAttributes)
+        XCTAssertEqual(1, runtime.createdSharedStates.count)
+        guard let attributes = runtime.createdSharedStates[0]?["userprofiledata"] as? [String: String] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(["key2": "value2"], attributes)
+    }
+
     func testHandleRulesEngineResponseForDelete() throws {
         UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
         let runtime = TestableExtensionRuntime()
@@ -138,6 +165,35 @@ class UserProfileTests: XCTestCase {
     }
 
     func testUpdateAttributes() throws {
+        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        let runtime = TestableExtensionRuntime()
+        let profile = UserProfile(runtime: runtime)
+        profile.onRegistered()
+        XCTAssertEqual(1, runtime.createdSharedStates.count)
+        runtime.createdSharedStates.removeAll()
+
+        guard let handleRequestProfile = runtime.listeners["\(EventType.userProfile)-\(EventSource.requestProfile)"] else {
+            XCTFail()
+            return
+        }
+        let event = Event(name: "UserProfileUpdate", type: "com.adobe.eventType.userProfile", source: "com.adobe.eventSource.requestProfile", data: ["userprofileupdatekey": ["key1": "valuex", "key2": ""]])
+        XCTAssert(event.isUpdateAttributesEvent)
+        handleRequestProfile(event)
+        guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(1, storedAttributes.count)
+        XCTAssertEqual(["key1": "valuex"], storedAttributes)
+        XCTAssertEqual(1, runtime.createdSharedStates.count)
+        guard let attributes = runtime.createdSharedStates[0]?["userprofiledata"] as? [String: String] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(["key1": "valuex"], attributes)
+    }
+
+    func testUpdateAttributesWithEmptyStringValue() throws {
         UserDefaults.standard.set(["key1": "value1"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
         let runtime = TestableExtensionRuntime()
         let profile = UserProfile(runtime: runtime)

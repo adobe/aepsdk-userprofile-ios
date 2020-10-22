@@ -68,9 +68,17 @@ public class UserProfile: NSObject, Extension {
         switch event.detailOperation {
         case UserProfileConstants.RulesEngine.CONSEQUENCE_OPERATION_WRITE:
             if let key = event.detailKey, let value = event.detailValue {
-                attributes.updateValue(value, forKey: key)
-                persistAttributes()
-                createSharedState(event: event)
+                if value.isEmpty {
+                    attributes.removeValue(forKey: key)
+                    persistAttributes()
+                    createSharedState(event: event)
+                    Log.debug(label: UserProfile.LOG_TAG, "remove attribute: key = \(key); value = [empty String]")
+                } else {
+                    attributes.updateValue(value, forKey: key)
+                    persistAttributes()
+                    createSharedState(event: event)
+                }
+
             } else {
                 Log.debug(label: UserProfile.LOG_TAG, "Unable to process this event: operation = \(String(describing: event.detailOperation)); key = \(String(describing: event.detailKey)); value = \(String(describing: event.detailValue))")
             }
@@ -104,10 +112,15 @@ public class UserProfile: NSObject, Extension {
             switch value {
             case Optional<Any>.none:
                 attributes.removeValue(forKey: key)
-                Log.debug(label: UserProfile.LOG_TAG, "remove attribute: key = \(key)")
+                Log.debug(label: UserProfile.LOG_TAG, "remove attribute: key = \(key); value = nil")
             default:
-                attributes.updateValue(value, forKey: key)
-                Log.debug(label: UserProfile.LOG_TAG, "update attribute: key = \(key); value = \(value)")
+                if (value as? String)?.isEmpty ?? false {
+                    attributes.removeValue(forKey: key)
+                    Log.debug(label: UserProfile.LOG_TAG, "remove attribute: key = \(key); value = [empty String]")
+                } else {
+                    attributes.updateValue(value, forKey: key)
+                    Log.debug(label: UserProfile.LOG_TAG, "update attribute: key = \(key); value = \(value)")
+                }
             }
         }
         persistAttributes()
