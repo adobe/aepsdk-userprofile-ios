@@ -35,7 +35,7 @@ jobs:
     - name: Run tests
       run: make test
 
-    # - name: Upload Code Coverage 
-    #   run: make generate-lcov; bash <(curl -s https://codecov.io/bash)  
+    - name: Upload Code Coverage 
+      run: make generate-lcov; bash <(curl -s https://codecov.io/bash)  
        
      
