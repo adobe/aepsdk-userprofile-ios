@@ -1,5 +1,9 @@
 export EXTENSION_NAME = AEPUserProfile
 PROJECT_NAME = $(EXTENSION_NAME)
+SCHEME_NAME_XCFRAMEWORK = AEPUserProfileXCF
+
+SIMULATOR_ARCHIVE_PATH = ./build/ios_simulator.xcarchive/Products/Library/Frameworks/
+IOS_ARCHIVE_PATH = ./build/ios.xcarchive/Products/Library/Frameworks/
 
 lint-autocorrect:
 	swiftlint autocorrect
@@ -33,3 +37,6 @@ test: clean
 	@echo "### Testing iOS"
 	@echo "######################################################################"
 	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(PROJECT_NAME)Tests -destination 'platform=iOS Simulator,name=iPhone 11 Pro' -derivedDataPath build/out -enableCodeCoverage YES
+
+archive:
+	

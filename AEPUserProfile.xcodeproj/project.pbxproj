@@ -59,7 +59,6 @@
 		7B2E802514D25DDCED194D71 /* Pods_AEPUserProfile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPUserProfile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		98B786D3131F9375BB009B57 /* Pods-AEPUserProfile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPUserProfile.debug.xcconfig"; path = "Target Support Files/Pods-AEPUserProfile/Pods-AEPUserProfile.debug.xcconfig"; sourceTree = "<group>"; };
 		BB0103B9253F880700B41C38 /* UserProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileTests.swift; sourceTree = "<group>"; };
-		BB08376025411AFC00253BE9 /* AEPUserProfileTests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "AEPUserProfileTests copy-Info.plist"; path = "/Users/yanyang/Git_Project/v5-swift/aepsdk-userprofile-ios/AEPUserProfileTests copy-Info.plist"; sourceTree = "<absolute>"; };
 		BBE24F10253A065D00C23435 /* Event+UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+UserProfile.swift"; sourceTree = "<group>"; };
 		BBE6C4CC2538B9220085876E /* AEPUserProfile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPUserProfile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBE6C4CF2538B9220085876E /* AEPUserProfile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPUserProfile.h; sourceTree = "<group>"; };
@@ -128,7 +127,6 @@
 				BBE6C4CE2538B9220085876E /* AEPUserProfile */,
 				BBE6C4CD2538B9220085876E /* Products */,
 				6FFF10A43138270B6CAB1448 /* Pods */,
-				BB08376025411AFC00253BE9 /* AEPUserProfileTests copy-Info.plist */,
 				6F1D665A0B7C0C2EA9582FA8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
