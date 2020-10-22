@@ -55,4 +55,14 @@ extension Event {
     var detailOperation: String? {
         return detail?[UserProfileConstants.RulesEngine.EventDataKeys.DETAIL_OPERATION] as? String
     }
+
+    // MARK: - Error Response Data
+
+    var isErrorResponseEvent: Bool {
+        return data?[UserProfileConstants.UserProfile.EventDataKeys.ERROR_RESPONSE] != nil
+    }
+
+    var errorMessage: String? {
+        return data?[UserProfileConstants.UserProfile.EventDataKeys.ERROR_MESSAGE_KEY] as? String
+    }
 }

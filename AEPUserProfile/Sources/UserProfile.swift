@@ -42,6 +42,8 @@ public class UserProfile: NSObject, Extension {
                 self.updateAttributes(event)
             } else if event.isGetAttributesEvent {
                 self.getAttributes(event)
+            } else {
+                Log.trace(label: UserProfile.LOG_TAG, "Unable to process this event: \(event)")
             }
         }
         registerListener(type: EventType.userProfile, source: EventSource.requestReset, listener: removeAttributes(event:))
@@ -52,8 +54,8 @@ public class UserProfile: NSObject, Extension {
 
     public func onUnregistered() {}
 
-    public func readyForEvent(_ event: Event) -> Bool {
-        return getSharedState(extensionName: UserProfileConstants.Configuration.NAME, event: event)?.status == .set
+    public func readyForEvent(_: Event) -> Bool {
+        return true
     }
 
     // MARK: - Event Listeners
@@ -62,7 +64,7 @@ public class UserProfile: NSObject, Extension {
     /// - Parameter event: the RulesEngine response event
     private func handleRulesEngineResponse(event: Event) {
         guard event.isRulesConsequenceEvent, event.consequenceType == UserProfileConstants.RulesEngine.CONSEQUENCE_KEY_CSP else {
-            Log.debug(label: UserProfile.LOG_TAG, "Unable to process this event: not a RulesEngine response event for UserProfile extension")
+            Log.trace(label: UserProfile.LOG_TAG, "Unable to process this event: not a RulesEngine response event for UserProfile extension")
             return
         }
         switch event.detailOperation {
@@ -99,7 +101,7 @@ public class UserProfile: NSObject, Extension {
     /// - Parameter event: the request event
     private func updateAttributes(_ event: Event) {
         guard let newAttributes = event.data?[UserProfileConstants.UserProfile.EventDataKeys.UPDATE_DATA_KEY] as? [String: Any], !newAttributes.isEmpty else {
-            Log.debug(label: UserProfile.LOG_TAG, "Unable to process the update attributes event: not found valid event data")
+            Log.debug(label: UserProfile.LOG_TAG, "Unable to process the update attributes event: invalid event data")
             return
         }
 
@@ -132,7 +134,10 @@ public class UserProfile: NSObject, Extension {
     /// - Parameter event: the request event
     private func getAttributes(_ event: Event) {
         guard let keys = event.data?[UserProfileConstants.UserProfile.EventDataKeys.GET_DATA_ATTRIBUTES] as? [String], !keys.isEmpty else {
-            Log.debug(label: UserProfile.LOG_TAG, "Unable to process the get attributes event: not found valid event data")
+            let errorMessage = "Unable to process the get attributes event: invalid event data"
+            Log.debug(label: UserProfile.LOG_TAG, errorMessage)
+            let responseEvent = event.createResponseEvent(name: "getUserAttributes", type: EventType.userProfile, source: EventSource.responseProfile, data: [UserProfileConstants.UserProfile.EventDataKeys.ERROR_RESPONSE: "", UserProfileConstants.UserProfile.EventDataKeys.ERROR_MESSAGE_KEY: errorMessage])
+            dispatch(event: responseEvent)
             return
         }
 
@@ -149,7 +154,7 @@ public class UserProfile: NSObject, Extension {
     /// - Parameter event: the request event
     private func removeAttributes(event: Event) {
         guard let keys = event.data?[UserProfileConstants.UserProfile.EventDataKeys.REMOVE_DATA_KEYS] as? [String], !keys.isEmpty else {
-            Log.debug(label: UserProfile.LOG_TAG, "Unable to process the remove attributes event: not found valid event data")
+            Log.debug(label: UserProfile.LOG_TAG, "Unable to process the remove attributes event: invalid event data")
             return
         }
         let attributesCount = attributes.count
@@ -157,7 +162,7 @@ public class UserProfile: NSObject, Extension {
             attributes.removeValue(forKey: key)
         }
         guard attributesCount != attributes.count else {
-            Log.debug(label: UserProfile.LOG_TAG, "Unable to process the remove attributes event: not found attributes for given keys - \(keys)")
+            Log.debug(label: UserProfile.LOG_TAG, "Unable to process the remove attributes event: no attributes matched with the given keys - \(keys)")
             return
         }
         persistAttributes()

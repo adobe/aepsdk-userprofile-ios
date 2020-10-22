@@ -16,22 +16,6 @@ import Foundation
 
 /// Defines the public interface for the `UserProfile` extension
 @objc public extension UserProfile {
-    ///  Called by the public API to update a user attribute value.
-    ///  If the attribute does not exist, it will be created.
-    ///  If the attribute already exists, then the value will be updated.
-    ///  A nil attribute value will remove the attribute.
-    ///
-    /// - Parameters:
-    ///   - attributeName: the attribute's key
-    ///   - attributeValue: the attribute's value
-    static func updateUserAttribute(attributeName: String, attributeValue: String?) {
-        guard let value = attributeValue else {
-            removeUserAttribute(attributeName: attributeName)
-            return
-        }
-        updateUserAttributes(attributeDict: [attributeName: value as Any])
-    }
-
     ///  Called by the public API to update user attributes.
     ///  If the attribute does not exist, it will be created.
     ///  If the attribute already exists, then the value will be updated.
@@ -46,14 +30,6 @@ import Foundation
         let eventData = [UserProfileConstants.UserProfile.EventDataKeys.UPDATE_DATA_KEY: attributeDict]
         let event = Event(name: "UserProfileUpdate", type: EventType.userProfile, source: EventSource.requestProfile, data: eventData)
         MobileCore.dispatch(event: event)
-    }
-
-    /// Called by the public API to remove the given user attribute.
-    /// If the attribute does not exist, then user profile module ignores the event. No shared state or user profile response event is dispatched
-    /// If the attribute exists, then the User Attribute will be removed, shared state is updated and user profile response event is dispatched
-    /// - Parameter attributeName: attribute key/name which has to be removed.
-    static func removeUserAttribute(attributeName: String) {
-        removeUserAttributes(attributeNames: [attributeName])
     }
 
     /// Called by the public API to remove the given user attributes.
@@ -85,6 +61,10 @@ import Foundation
         MobileCore.dispatch(event: event) { responseEvent in
             guard let responseEvent = responseEvent else {
                 completion(nil, .callbackTimeout)
+                return
+            }
+            guard !responseEvent.isErrorResponseEvent else {
+                completion(nil, .unexpected)
                 return
             }
             let attributes = responseEvent.data?[UserProfileConstants.UserProfile.EventDataKeys.GET_DATA_ATTRIBUTES] as? [String: Any]

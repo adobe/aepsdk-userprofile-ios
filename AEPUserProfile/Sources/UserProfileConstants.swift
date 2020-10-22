@@ -30,6 +30,8 @@ enum UserProfileConstants {
             static let REMOVE_DATA_KEYS = "userprofileremovekeys"
             static let GET_DATA_ATTRIBUTES = "userprofilegetattributes"
             static let USERPROFILE_DATA_KEY = "userprofiledata"
+            static let ERROR_RESPONSE = "errorresponse"
+            static let ERROR_MESSAGE_KEY = "errormessagekey"
         }
     }
 

@@ -324,7 +324,7 @@ class UserProfileTests: XCTestCase {
         XCTAssert(event.isGetAttributesEvent)
         handleRequestProfile(event)
         XCTAssertEqual(0, runtime.createdSharedStates.count)
-        XCTAssertEqual(0, runtime.dispatchedEvents.count)
+        XCTAssertEqual(1, runtime.dispatchedEvents.count)
     }
 
     func testRemoveAttributes() throws {
