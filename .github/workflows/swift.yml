@@ -36,6 +36,6 @@ jobs:
       run: make test
 
     - name: Upload Code Coverage 
-      run: make generate-lcov; bash <(curl -s https://codecov.io/bash)  
+      run: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/out" -J "AEPUserProfile" -t ${CODECOV_TOKEN}
        
      
