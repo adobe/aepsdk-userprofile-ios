@@ -20,9 +20,77 @@ To learn more about this extension, read [Adobe Experience Platform Edge Mobile 
 
 ### [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)
 
+```ruby
+# Podfile
+use_frameworks!
+
+target 'YOUR_TARGET_NAME' do
+    pod 'AEPUserProfile', :git => 'git@github.com:adobe/aepsdk-userprofile-ios.git', :branch => 'main'
+    pod 'AEPCore', :git => 'git@github.com:adobe/aepsdk-core-ios.git', :branch => 'main'
+    pod 'AEPServices', :git => 'git@github.com:adobe/aepsdk-core-ios.git', :branch => 'main'
+    pod 'AEPRulesEngine', :git => 'git@github.com:adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+end
+```
+
 ### [Swift Package Manager](https://github.com/apple/swift-package-manager)
 
+To add the AEPEdge Package to your application, from the Xcode menu select:
+
+`File > Swift Packages > Add Package Dependency...`
+
+Enter the URL for the AEPEdge package repository: `https://github.com/adobe/aepsdk-userprofile-ios.git`.
+
+When prompted, make sure you change the branch to `main`. (Once the repo is public, we will reference specific tags/versions instead of a branch)
+
+Alternatively, if your project has a `Package.swift` file, you can add AEPEdge directly to your dependencies:
+
+```
+dependencies: [
+	.package(url: "https://github.com/adobe/aepsdk-userprofile-ios.git", .branch: "main"),
+targets: [
+   	.target(name: "YourTarget",
+    				dependencies: ["AEPUserProfile"],
+          	path: "your/path"),
+    ]
+]
+```
+
 ### Binaries
+
+To generate an `AEPEdge.xcframework`, run the following command:
+
+```
+make archive
+```
+
+## Development
+
+The first time you clone or download the project, you should run the following from the root directory to setup the environment:
+
+~~~
+make pod-install
+~~~
+
+Subsequently, you can make sure your environment is updated by running the following:
+
+~~~
+make pod-update
+~~~
+
+#### Open the Xcode workspace
+Open the workspace in Xcode by running the following command from the root directory of the repository:
+
+~~~
+make open
+~~~
+
+#### Command line integration
+
+You can run all the test suites from command line:
+
+~~~
+make test
+~~~
 
 ## Contributing
 
