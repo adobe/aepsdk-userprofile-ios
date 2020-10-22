@@ -2,9 +2,9 @@ name: UserProfile-CI
 
 on:
   push:
-    branches: [ test ]
+    branches: [ dev ]
   pull_request:
-    branches: [ test ]
+    branches: [ dev ]
 
 jobs:
   build:
