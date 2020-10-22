@@ -52,8 +52,8 @@ public class UserProfile: NSObject, Extension {
 
     public func onUnregistered() {}
 
-    public func readyForEvent(_: Event) -> Bool {
-        return getSharedState(extensionName: UserProfileConstants.Configuration.NAME, event: nil)?.status == .set
+    public func readyForEvent(_ event: Event) -> Bool {
+        return getSharedState(extensionName: UserProfileConstants.Configuration.NAME, event: event)?.status == .set
     }
 
     // MARK: - Event Listeners
