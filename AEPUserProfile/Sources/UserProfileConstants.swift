@@ -27,7 +27,7 @@ enum UserProfileConstants {
     enum UserProfile {
         static let EVENT_NAME_UPDATE_USER_PROFILE = "UserProfileUpdate"
         static let EVENT_NAME_GET_USER_PROFILE = "getUserAttributes"
-        static let EVENT_NAME_REMOVE_USER_PROFILE = "RemoveUserProfile"
+        static let EVENT_NAME_REMOVE_USER_PROFILE = "RemoveUserProfiles"
         enum EventDataKeys {
             static let UPDATE_DATA = "userprofileupdatekey"
             static let REMOVE_DATA = "userprofileremovekeys"
