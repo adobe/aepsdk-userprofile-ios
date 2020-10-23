@@ -17,7 +17,7 @@ extension Event {
     // MARK: - UserProfile Request
 
     var isUpdateAttributesEvent: Bool {
-        return data?[UserProfileConstants.UserProfile.EventDataKeys.UPDATE_DATA_KEY] != nil
+        return data?[UserProfileConstants.UserProfile.EventDataKeys.UPDATE_DATA] != nil
     }
 
     var isGetAttributesEvent: Bool {
@@ -63,6 +63,6 @@ extension Event {
     }
 
     var errorMessage: String? {
-        return data?[UserProfileConstants.UserProfile.EventDataKeys.ERROR_MESSAGE_KEY] as? String
+        return data?[UserProfileConstants.UserProfile.EventDataKeys.ERROR_MESSAGE] as? String
     }
 }
