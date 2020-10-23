@@ -19,10 +19,10 @@ let package = Package(
     products: [
         .library(name: "AEPUserProfile", targets: ["AEPUserProfile"]),
         .library(name: "AEPUserProfileStatic", type: .static, targets: ["AEPUserProfile"]),
-        .library(name: "AEPUserProfileDynamic", type: .dynamic, targets: ["AEPUserProfile"])
+        .library(name: "AEPUserProfileDynamic", type: .dynamic, targets: ["AEPUserProfile"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/adobe/aepsdk-core-ios.git", .branch("main"))
+        .package(url: "https://github.com/adobe/aepsdk-core-ios.git", .branch("main")),
     ],
     targets: [
         .target(name: "AEPUserProfile",
