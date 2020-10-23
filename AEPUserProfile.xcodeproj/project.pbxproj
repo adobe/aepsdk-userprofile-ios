@@ -6,6 +6,20 @@
 	objectVersion = 52;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		BBA60C2925425EF200A85E3C /* AEPUserProfileXCFramework */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = BBA60C2C25425EF200A85E3C /* Build configuration list for PBXAggregateTarget "AEPUserProfileXCFramework" */;
+			buildPhases = (
+			);
+			dependencies = (
+				BBA60C2E25425EFB00A85E3C /* PBXTargetDependency */,
+			);
+			name = AEPUserProfileXCFramework;
+			productName = AEPUserProfileXCFramework;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		91DA8108570623AA27CDCDD0 /* Pods_AEPUserProfileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B625AF2604317D08E29462D /* Pods_AEPUserProfileTests.framework */; };
 		9A48B4B699B8DB4B4EB7A19E /* Pods_AEPUserProfile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B2E802514D25DDCED194D71 /* Pods_AEPUserProfile.framework */; };
@@ -20,6 +34,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		BBA60C2D25425EFB00A85E3C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BBE6C4C32538B9220085876E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BBE6C4CB2538B9220085876E;
+			remoteInfo = AEPUserProfile;
+		};
 		BBE6C4D72538B9220085876E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BBE6C4C32538B9220085876E /* Project object */;
@@ -59,7 +80,6 @@
 		7B2E802514D25DDCED194D71 /* Pods_AEPUserProfile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPUserProfile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		98B786D3131F9375BB009B57 /* Pods-AEPUserProfile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPUserProfile.debug.xcconfig"; path = "Target Support Files/Pods-AEPUserProfile/Pods-AEPUserProfile.debug.xcconfig"; sourceTree = "<group>"; };
 		BB0103B9253F880700B41C38 /* UserProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileTests.swift; sourceTree = "<group>"; };
-		BB08376025411AFC00253BE9 /* AEPUserProfileTests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "AEPUserProfileTests copy-Info.plist"; path = "/Users/yanyang/Git_Project/v5-swift/aepsdk-userprofile-ios/AEPUserProfileTests copy-Info.plist"; sourceTree = "<absolute>"; };
 		BBE24F10253A065D00C23435 /* Event+UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+UserProfile.swift"; sourceTree = "<group>"; };
 		BBE6C4CC2538B9220085876E /* AEPUserProfile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPUserProfile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBE6C4CF2538B9220085876E /* AEPUserProfile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPUserProfile.h; sourceTree = "<group>"; };
@@ -128,7 +148,6 @@
 				BBE6C4CE2538B9220085876E /* AEPUserProfile */,
 				BBE6C4CD2538B9220085876E /* Products */,
 				6FFF10A43138270B6CAB1448 /* Pods */,
-				BB08376025411AFC00253BE9 /* AEPUserProfileTests copy-Info.plist */,
 				6F1D665A0B7C0C2EA9582FA8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -240,6 +259,9 @@
 				LastUpgradeCheck = 1170;
 				ORGANIZATIONNAME = "Adobe Mobile";
 				TargetAttributes = {
+					BBA60C2925425EF200A85E3C = {
+						CreatedOnToolsVersion = 11.7;
+					};
 					BBE6C4CB2538B9220085876E = {
 						CreatedOnToolsVersion = 11.7;
 						LastSwiftMigration = 1170;
@@ -264,6 +286,7 @@
 			targets = (
 				BBE6C4CB2538B9220085876E /* AEPUserProfile */,
 				BBE6C4D42538B9220085876E /* AEPUserProfileTests */,
+				BBA60C2925425EF200A85E3C /* AEPUserProfileXCFramework */,
 			);
 		};
 /* End PBXProject section */
@@ -390,6 +413,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		BBA60C2E25425EFB00A85E3C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BBE6C4CB2538B9220085876E /* AEPUserProfile */;
+			targetProxy = BBA60C2D25425EFB00A85E3C /* PBXContainerItemProxy */;
+		};
 		BBE6C4D82538B9220085876E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			platformFilter = ios;
@@ -399,6 +427,24 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		BBA60C2A25425EF200A85E3C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKGEE875K4;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BBA60C2B25425EF200A85E3C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKGEE875K4;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		BBE6C4DE2538B9220085876E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -629,6 +675,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		BBA60C2C25425EF200A85E3C /* Build configuration list for PBXAggregateTarget "AEPUserProfileXCFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BBA60C2A25425EF200A85E3C /* Debug */,
+				BBA60C2B25425EF200A85E3C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		BBE6C4C62538B9220085876E /* Build configuration list for PBXProject "AEPUserProfile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
