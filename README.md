@@ -2,7 +2,7 @@
 
 ## BETA ACKNOWLEDGEMENT
 
-AEPCore is currently in Beta. Use of this code is by invitation only and not otherwise supported by Adobe. Please contact your Adobe Customer Success Manager to learn more.
+AEPUserProfile is currently in Beta. Use of this code is by invitation only and not otherwise supported by Adobe. Please contact your Adobe Customer Success Manager to learn more.
 
 By using the Beta, you hereby acknowledge that the Beta is provided "as is" without warranty of any kind. Adobe shall have no obligation to maintain, correct, update, change, modify or otherwise support the Beta. You are advised to use caution and not to rely in any way on the correct functioning or performance of such Beta and/or accompanying materials.
 
@@ -34,15 +34,15 @@ end
 
 ### [Swift Package Manager](https://github.com/apple/swift-package-manager)
 
-To add the AEPEdge Package to your application, from the Xcode menu select:
+To add the AEPUserProfile Package to your application, from the Xcode menu select:
 
 `File > Swift Packages > Add Package Dependency...`
 
-Enter the URL for the AEPEdge package repository: `https://github.com/adobe/aepsdk-userprofile-ios.git`.
+Enter the URL for the AEPUserProfile package repository: `https://github.com/adobe/aepsdk-userprofile-ios.git`.
 
-When prompted, make sure you change the branch to `main`. (Once the repo is public, we will reference specific tags/versions instead of a branch)
+When prompted, make sure you change the branch to `main`. 
 
-Alternatively, if your project has a `Package.swift` file, you can add AEPEdge directly to your dependencies:
+Alternatively, if your project has a `Package.swift` file, you can add AEPUserProfile directly to your dependencies:
 
 ```
 dependencies: [
@@ -57,7 +57,7 @@ targets: [
 
 ### Binaries
 
-To generate an `AEPEdge.xcframework`, run the following command:
+To generate an `AEPUserProfile.xcframework`, run the following command:
 
 ```
 make archive
