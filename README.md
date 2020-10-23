@@ -46,12 +46,12 @@ Alternatively, if your project has a `Package.swift` file, you can add AEPUserPr
 
 ```
 dependencies: [
-	.package(url: "https://github.com/adobe/aepsdk-userprofile-ios.git", .branch: "main"),
+    .package(url: "https://github.com/adobe/aepsdk-userprofile-ios.git", .branch("main")),
+],
 targets: [
-   	.target(name: "YourTarget",
-    				dependencies: ["AEPUserProfile"],
-          	path: "your/path"),
-    ]
+    .target(name: "YourTarget",
+            dependencies: ["AEPUserProfile"],
+	    path: "your/path")
 ]
 ```
 
