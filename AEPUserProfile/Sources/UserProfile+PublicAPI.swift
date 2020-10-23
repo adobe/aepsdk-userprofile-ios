@@ -42,14 +42,14 @@ import Foundation
             return
         }
         let eventData = [UserProfileConstants.UserProfile.EventDataKeys.REMOVE_DATA: attributeNames]
-        let event = Event(name: UserProfileConstants.UserProfile.EventDataKeys.REMOVE_DATA, type: EventType.userProfile, source: EventSource.requestReset, data: eventData)
+        let event = Event(name: UserProfileConstants.UserProfile.EVENT_NAME_REMOVE_USER_PROFILE, type: EventType.userProfile, source: EventSource.requestReset, data: eventData)
         MobileCore.dispatch(event: event)
     }
 
     /// Called by the public API to get the user attributes
     /// - Parameters:
     ///   - attributeNames: Attribute keys/names which will be used to retrieve user attributes
-    ///   - completion: the callback `function` which will be called with user attributes
+    ///   - completion: the callback `closure` which will be called with user attributes
     static func getUserAttributes(attributeNames: [String], completion: @escaping ([String: Any]?, AEPError) -> Void) {
         guard !attributeNames.isEmpty else {
             Log.trace(label: LOG_TAG, "getUserAttributes - no name provided, no event was dispatched")

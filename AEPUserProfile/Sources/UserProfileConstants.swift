@@ -15,7 +15,7 @@ import Foundation
 enum UserProfileConstants {
     static let EXTENSION_NAME = "com.adobe.module.userProfile"
     static let FRIENDLY_NAME = "UserProfile"
-    static let EXTENSION_VERSION = "3.0.0-bate.1"
+    static let EXTENSION_VERSION = "3.0.0-beta.1"
     static let LOG_PREFIX = FRIENDLY_NAME
     static let DATASTORE_NAME = EXTENSION_NAME
     static let DATASTORE_KEY_ATTRIBUTES = "attributes"
@@ -25,7 +25,7 @@ enum UserProfileConstants {
     }
 
     enum UserProfile {
-        static let EVENT_NAME_UPDATE_USER_PROFILE = "UserProfileUpdateS"
+        static let EVENT_NAME_UPDATE_USER_PROFILE = "updateUserAttributes"
         static let EVENT_NAME_GET_USER_PROFILE = "getUserAttributes"
         static let EVENT_NAME_REMOVE_USER_PROFILE = "removeUserAttributes"
         enum EventDataKeys {
