@@ -27,8 +27,8 @@ import Foundation
             return
         }
 
-        let eventData = [UserProfileConstants.UserProfile.EventDataKeys.UPDATE_DATA_KEY: attributeDict]
-        let event = Event(name: "UserProfileUpdate", type: EventType.userProfile, source: EventSource.requestProfile, data: eventData)
+        let eventData = [UserProfileConstants.UserProfile.EventDataKeys.UPDATE_DATA: attributeDict]
+        let event = Event(name: UserProfileConstants.UserProfile.EVENT_NAME_UPDATE_USER_PROFILE, type: EventType.userProfile, source: EventSource.requestProfile, data: eventData)
         MobileCore.dispatch(event: event)
     }
 
@@ -41,8 +41,8 @@ import Foundation
             Log.trace(label: LOG_TAG, "removeUserAttributes - no name provided, no event was dispatched")
             return
         }
-        let eventData = [UserProfileConstants.UserProfile.EventDataKeys.REMOVE_DATA_KEYS: attributeNames]
-        let event = Event(name: "RemoveUserProfiles", type: EventType.userProfile, source: EventSource.requestReset, data: eventData)
+        let eventData = [UserProfileConstants.UserProfile.EventDataKeys.REMOVE_DATA: attributeNames]
+        let event = Event(name: UserProfileConstants.UserProfile.EventDataKeys.REMOVE_DATA, type: EventType.userProfile, source: EventSource.requestReset, data: eventData)
         MobileCore.dispatch(event: event)
     }
 
@@ -57,7 +57,7 @@ import Foundation
             return
         }
         let eventData = [UserProfileConstants.UserProfile.EventDataKeys.GET_DATA_ATTRIBUTES: attributeNames]
-        let event = Event(name: "getUserAttributes", type: EventType.userProfile, source: EventSource.requestProfile, data: eventData)
+        let event = Event(name: UserProfileConstants.UserProfile.EventDataKeys.GET_DATA_ATTRIBUTES, type: EventType.userProfile, source: EventSource.requestProfile, data: eventData)
         MobileCore.dispatch(event: event) { responseEvent in
             guard let responseEvent = responseEvent else {
                 completion(nil, .callbackTimeout)

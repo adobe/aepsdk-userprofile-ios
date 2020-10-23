@@ -14,7 +14,7 @@ import AEPCore
 import AEPServices
 import Foundation
 
-@objc(AEPMobileProfile)
+@objc(AEPMobileUserProfile)
 public class UserProfile: NSObject, Extension {
     internal static let LOG_TAG = "UserProfile"
 
@@ -100,7 +100,7 @@ public class UserProfile: NSObject, Extension {
     /// Handles  the `UserProfile`request event - update attributes
     /// - Parameter event: the request event
     private func updateAttributes(_ event: Event) {
-        guard let newAttributes = event.data?[UserProfileConstants.UserProfile.EventDataKeys.UPDATE_DATA_KEY] as? [String: Any], !newAttributes.isEmpty else {
+        guard let newAttributes = event.data?[UserProfileConstants.UserProfile.EventDataKeys.UPDATE_DATA] as? [String: Any], !newAttributes.isEmpty else {
             Log.debug(label: UserProfile.LOG_TAG, "Unable to process the update attributes event: invalid event data")
             return
         }
@@ -136,7 +136,7 @@ public class UserProfile: NSObject, Extension {
         guard let keys = event.data?[UserProfileConstants.UserProfile.EventDataKeys.GET_DATA_ATTRIBUTES] as? [String], !keys.isEmpty else {
             let errorMessage = "Unable to process the get attributes event: invalid event data"
             Log.debug(label: UserProfile.LOG_TAG, errorMessage)
-            let responseEvent = event.createResponseEvent(name: "getUserAttributes", type: EventType.userProfile, source: EventSource.responseProfile, data: [UserProfileConstants.UserProfile.EventDataKeys.ERROR_RESPONSE: "", UserProfileConstants.UserProfile.EventDataKeys.ERROR_MESSAGE_KEY: errorMessage])
+            let responseEvent = event.createResponseEvent(name: "getUserAttributes", type: EventType.userProfile, source: EventSource.responseProfile, data: [UserProfileConstants.UserProfile.EventDataKeys.ERROR_RESPONSE: "", UserProfileConstants.UserProfile.EventDataKeys.ERROR_MESSAGE: errorMessage])
             dispatch(event: responseEvent)
             return
         }
@@ -153,7 +153,7 @@ public class UserProfile: NSObject, Extension {
     /// Handles  the `UserProfile`request event - remove attributes
     /// - Parameter event: the request event
     private func removeAttributes(event: Event) {
-        guard let keys = event.data?[UserProfileConstants.UserProfile.EventDataKeys.REMOVE_DATA_KEYS] as? [String], !keys.isEmpty else {
+        guard let keys = event.data?[UserProfileConstants.UserProfile.EventDataKeys.REMOVE_DATA] as? [String], !keys.isEmpty else {
             Log.debug(label: UserProfile.LOG_TAG, "Unable to process the remove attributes event: invalid event data")
             return
         }
@@ -184,7 +184,7 @@ public class UserProfile: NSObject, Extension {
     }
 
     private func createSharedState(event: Event? = nil) {
-        let sharedStateData = [UserProfileConstants.UserProfile.EventDataKeys.USERPROFILE_DATA_KEY: attributes]
+        let sharedStateData = [UserProfileConstants.UserProfile.EventDataKeys.USERPROFILE_DATA: attributes]
         createSharedState(data: sharedStateData as [String: Any], event: event)
     }
 
