@@ -57,7 +57,7 @@ import Foundation
             return
         }
         let eventData = [UserProfileConstants.UserProfile.EventDataKeys.GET_DATA_ATTRIBUTES: attributeNames]
-        let event = Event(name: UserProfileConstants.UserProfile.EventDataKeys.GET_DATA_ATTRIBUTES, type: EventType.userProfile, source: EventSource.requestProfile, data: eventData)
+        let event = Event(name: UserProfileConstants.UserProfile.EVENT_NAME_GET_USER_PROFILE, type: EventType.userProfile, source: EventSource.requestProfile, data: eventData)
         MobileCore.dispatch(event: event) { responseEvent in
             guard let responseEvent = responseEvent else {
                 completion(nil, .callbackTimeout)
