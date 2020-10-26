@@ -5,7 +5,7 @@ on [![Cocoapods](https://img.shields.io/cocoapods/v/AEPCore.svg?color=orange&lab
 -->
 [![SPM](https://img.shields.io/badge/SPM-Supported-orange.svg?logo=apple&logoColor=white)](https://swift.org/package-manager/)
 ![UserProfile-CI](https://github.com/adobe/aepsdk-userprofile-ios/workflows/UserProfile-CI/badge.svg)
-[![codecov](https://codecov.io/gh/adobe/aepsdk-userprofile-ios/branch/main/graph/badge.svg?token=33I4P5FMOG)](undefined)
+[![Code Coverage](https://img.shields.io/codecov/c/github/adobe/aepsdk-userprofile-ios/master.svg?logo=codecov)](https://codecov.io/gh/adobe/aepsdk-userprofile-ios/branch/master)
 
 ## BETA ACKNOWLEDGEMENT
 
