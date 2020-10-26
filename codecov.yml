@@ -8,12 +8,18 @@ coverage:
   range: "70...90"
 
   status:
-    project: yes
-    patch: yes
+    project:
+      default:
+        target: 85%
+        threshold: 5%
+    patch:
+      default:
+        target: 85%
+        threshold: 5%
     changes: no
 
   ignore:
-    - "./Tests/.*"
+    - "./AEPUserProfile/Tests/.*"
 
 parsers:
   gcov:
