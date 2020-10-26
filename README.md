@@ -1,5 +1,12 @@
 # AEPUserProfile
 
+<!--
+on [![Cocoapods](https://img.shields.io/cocoapods/v/AEPCore.svg?color=orange&label=AEPCore&logo=apple&logoColor=white)](https://cocoapods.org/pods/AEPUserprofile)
+-->
+[![SPM](https://img.shields.io/badge/SPM-Supported-orange.svg?logo=apple&logoColor=white)](https://swift.org/package-manager/)
+![UserProfile-CI](https://github.com/adobe/aepsdk-userprofile-ios/workflows/UserProfile-CI/badge.svg)
+[![codecov](https://codecov.io/gh/adobe/aepsdk-userprofile-ios/branch/main/graph/badge.svg?token=33I4P5FMOG)](undefined)
+
 ## BETA ACKNOWLEDGEMENT
 
 AEPUserProfile is currently in Beta. Use of this code is by invitation only and not otherwise supported by Adobe. Please contact your Adobe Customer Success Manager to learn more.
