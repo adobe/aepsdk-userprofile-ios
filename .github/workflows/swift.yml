@@ -2,9 +2,13 @@ name: UserProfile-CI
 
 on:
   push:
-    branches: [ dev ]
+    branches:
+      - dev*
+      - main
   pull_request:
-    branches: [ dev ]
+    branches: 
+      - dev*
+      - main
 
 jobs:
   build:
@@ -36,6 +40,6 @@ jobs:
       run: make test
 
     - name: Upload Code Coverage 
-      run: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/out" -J "AEPUserProfile" -t ${CODECOV_TOKEN}
+      run: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/out" -J "AEPUserProfile"
        
      
