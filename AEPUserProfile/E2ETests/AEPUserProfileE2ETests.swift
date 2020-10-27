@@ -26,6 +26,7 @@ class AEPUserProfileE2ETests: XCTestCase {
     func testRulesEngineIntegration() throws {
         MobileCore.setLogLevel(.trace)
         MobileCore.registerExtensions([UserProfile.self])
+        // Launch Property name : AEPUserProfile_E2E_DO_NOT_DELETE
         MobileCore.configureWith(appId: "94f571f308d5/40c2dd990434/launch-c1320f564c90-development")
         sleep(2)
         UserProfile.updateUserAttributes(attributeDict: ["int_key": "200", "string_key": "xxxx string_value xxx", "int_contains_key": 5])
