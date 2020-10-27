@@ -7,7 +7,6 @@ on [![Cocoapods](https://img.shields.io/cocoapods/v/AEPCore.svg?color=orange&lab
 ![UserProfile-CI](https://github.com/adobe/aepsdk-userprofile-ios/workflows/UserProfile-CI/badge.svg)
 [![Code Coverage](https://img.shields.io/codecov/c/github/adobe/aepsdk-userprofile-ios/dev.svg?logo=codecov)](https://codecov.io/gh/adobe/aepsdk-userprofile-ios/branch/dev)
 
-
 ## BETA ACKNOWLEDGEMENT
 
 AEPUserProfile is currently in Beta. Use of this code is by invitation only and not otherwise supported by Adobe. Please contact your Adobe Customer Success Manager to learn more.
