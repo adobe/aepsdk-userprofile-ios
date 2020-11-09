@@ -377,6 +377,32 @@ class UserProfileTests: XCTestCase {
         XCTAssertEqual(["key1": "value1", "key2": "value2"], storedAttributes)
         XCTAssertEqual(0, runtime.createdSharedStates.count)
     }
+
+    func testV5MigratorLoadExistingAttributes() throws {
+        let json = """
+        {
+          "d" : {
+            "a2" : "yy",
+            "a1" : "xx"
+          },
+          "b" : 123,
+          "c" : [
+            1,
+            2
+          ],
+          "a" : "aaa"
+        }
+        """
+        UserDefaults.standard.set(json, forKey: "Adobe.ADBUserProfile.user_profile")
+        guard let attributes = UserProfileV5Migrator.existingAttributes() else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("aaa", attributes["a"] as? String)
+        XCTAssertEqual(123, attributes["b"] as? Int)
+        XCTAssertEqual([1, 2], attributes["c"] as? [Int])
+        XCTAssertEqual(["a1": "xx", "a2": "yy"], attributes["d"] as? [String: String])
+    }
 }
 
 public class TestableExtensionRuntime: ExtensionRuntime {
