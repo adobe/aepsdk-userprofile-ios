@@ -2,7 +2,7 @@
 
 This document details all the APIs provided by UserProfile, along with sample code snippets on how to properly use the APIs.
 
-For more in-depth information about the UserProfile extension, visit the [offical SDK documentation on UserProfile](https://aep-sdks.gitbook.io/docs/using-mobile-extensions/mobile-core/identity).
+For more in-depth information about the UserProfile extension, visit the [SDK documentation on UserProfile](https://aep-sdks.gitbook.io/docs/using-mobile-extensions/profile).
 
 ## API Usage
 
