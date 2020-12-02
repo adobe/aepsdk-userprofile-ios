@@ -23,6 +23,7 @@ class UserProfileFunctionalTests: XCTestCase {
     override func setUpWithError() throws {
         MobileCore.setLogLevel(.trace)
         UserDefaults.standard.removeObject(forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        UserDefaults.standard.removeObject(forKey: "Adobe.ADBUserProfile.user_profile")
     }
 
     override func tearDownWithError() throws {
@@ -269,6 +270,48 @@ class UserProfileFunctionalTests: XCTestCase {
 
         MobileCore.unregisterExtension(UserProfile.self)
         MobileCore.unregisterExtension(MonitorExtension.self)
+    }
+
+    func testDataMigration() throws {
+        // Given
+        let json = """
+        {
+          "d" : {
+            "a2" : "yy",
+            "a1" : "xx"
+          },
+          "b" : 123,
+          "c" : [
+            1,
+            2
+          ],
+          "a" : "aaa"
+        }
+        """
+        UserDefaults.standard.set(json, forKey: "Adobe.ADBUserProfile.user_profile")
+        let expectation = self.expectation(description: "register UserProfile extension")
+
+        MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 2)
+        // When
+        let expectGet = self.expectation(description: "getUserAttributes()")
+        UserProfile.getUserAttributes(attributeNames: []) {
+            _, error in
+            expectGet.fulfill()
+            XCTAssertEqual(AEPError.none, error)
+            let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: Any]
+            XCTAssertEqual("aaa", storedAttributes?["a"] as? String)
+            XCTAssertEqual(123, storedAttributes?["b"] as? Int)
+            XCTAssertEqual([1, 2], storedAttributes?["c"] as? [Int])
+            XCTAssertEqual(["a1": "xx", "a2": "yy"], storedAttributes?["d"] as? [String: String])
+            MobileCore.unregisterExtension(UserProfile.self)
+            XCTAssertNil(UserDefaults.standard.object(forKey: "Adobe.ADBUserProfile.user_profile"))
+        }
+
+        // Then
+        waitForExpectations(timeout: 2)
     }
 }
 

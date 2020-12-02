@@ -20,6 +20,10 @@ enum UserProfileConstants {
     static let DATASTORE_NAME = EXTENSION_NAME
     static let DATASTORE_KEY_ATTRIBUTES = "attributes"
 
+    enum V5Migration {
+        static let USER_PROFILE_KEY = "Adobe.ADBUserProfile.user_profile"
+    }
+
     enum Configuration {
         static let NAME = "com.adobe.module.configuration"
     }
