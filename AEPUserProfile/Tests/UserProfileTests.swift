@@ -403,6 +403,19 @@ class UserProfileTests: XCTestCase {
         XCTAssertEqual([1, 2], attributes["c"] as? [Int])
         XCTAssertEqual(["a1": "xx", "a2": "yy"], attributes["d"] as? [String: String])
     }
+
+    func testV5MigratorLoadExistingAttributesWithIncorrectFormat() throws {
+        let json = """
+        {
+          "d"
+        }
+        """
+        UserDefaults.standard.set(json, forKey: "Adobe.ADBUserProfile.user_profile")
+        guard let _ = UserProfileV5Migrator.existingAttributes() else {
+            return
+        }
+        XCTFail()
+    }
 }
 
 public class TestableExtensionRuntime: ExtensionRuntime {

@@ -19,12 +19,8 @@ enum UserProfileV5Migrator {
         guard let json = UserDefaults.standard.object(forKey: UserProfileConstants.V5Migration.USER_PROFILE_KEY) as? String else {
             return nil
         }
-        guard let jsonData = json.data(using: .utf8) else {
+        guard let jsonData = json.data(using: .utf8), let attributes = try? JSONDecoder().decode([String: AnyCodable].self, from: jsonData) else {
             Log.debug(label: UserProfile.LOG_TAG, "data migration - failed to load (json) user attributes from data storage")
-            return nil
-        }
-        guard let attributes = try? JSONDecoder().decode([String: AnyCodable].self, from: jsonData) else {
-            Log.debug(label: UserProfile.LOG_TAG, "data migration - failed to decode json string to a [String:Any] type")
             return nil
         }
         return attributes.asDictionary()
