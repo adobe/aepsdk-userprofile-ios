@@ -50,7 +50,7 @@ public class UserProfile: NSObject, Extension {
         registerListener(type: EventType.rulesEngine, source: EventSource.responseContent, listener: handleRulesEngineResponse(event:))
         loadAttributes()
         if let existingAttributes = UserProfileV5Migrator.existingAttributes() {
-            Log.trace(label: UserProfile.LOG_TAG, "Start to do data migration")
+            Log.trace(label: UserProfile.LOG_TAG, "Data migration starts")
             attributes.merge(existingAttributes) { old, _ in old }
             persistAttributes()
             UserProfileV5Migrator.clearExistingAttributes()
@@ -202,23 +202,5 @@ public class UserProfile: NSObject, Extension {
             Log.debug(label: UserProfile.LOG_TAG, "\(object) is a non-property-list object ")
             return false
         }
-    }
-}
-
-public enum UserProfileV5Migrator {
-    static func existingAttributes() -> [String: Any]? {
-        guard let json = UserDefaults.standard.object(forKey: UserProfileConstants.V5Migration.USER_PROFILE_KEY) as? String, let jsonData = json.data(using: .utf8) else {
-            Log.debug(label: UserProfile.LOG_TAG, "data migration - failed to load (json) user attributes from data storage")
-            return nil
-        }
-        guard let attributes = try? JSONDecoder().decode([String: AnyCodable].self, from: jsonData) else {
-            Log.debug(label: UserProfile.LOG_TAG, "data migration - failed to decode json string to a [String:Any] type")
-            return nil
-        }
-        return attributes.asDictionary()
-    }
-
-    static func clearExistingAttributes() {
-        UserDefaults.standard.removeObject(forKey: UserProfileConstants.V5Migration.USER_PROFILE_KEY)
     }
 }

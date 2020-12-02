@@ -27,6 +27,7 @@
 		BB0103BA253F880700B41C38 /* UserProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0103B9253F880700B41C38 /* UserProfileTests.swift */; };
 		BB08376225411B6900253BE9 /* UserProfileFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE6C4DA2538B9220085876E /* UserProfileFunctionalTests.swift */; };
 		BB4CC52B253E481700A34A4E /* AEPUserProfile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBE6C4CC2538B9220085876E /* AEPUserProfile.framework */; platformFilter = ios; };
+		BB87E3C62578022600C316E8 /* UserProfileV5Migrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB87E3C52578022600C316E8 /* UserProfileV5Migrator.swift */; };
 		BBE24F11253A065D00C23435 /* Event+UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE24F10253A065D00C23435 /* Event+UserProfile.swift */; };
 		BBE6C4DD2538B9220085876E /* AEPUserProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = BBE6C4CF2538B9220085876E /* AEPUserProfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BBE6C4EB2538B9790085876E /* UserProfileConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE6C4E92538B9790085876E /* UserProfileConstants.swift */; };
@@ -92,6 +93,7 @@
 		7B2E802514D25DDCED194D71 /* Pods_AEPUserProfile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPUserProfile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		98B786D3131F9375BB009B57 /* Pods-AEPUserProfile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPUserProfile.debug.xcconfig"; path = "Target Support Files/Pods-AEPUserProfile/Pods-AEPUserProfile.debug.xcconfig"; sourceTree = "<group>"; };
 		BB0103B9253F880700B41C38 /* UserProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileTests.swift; sourceTree = "<group>"; };
+		BB87E3C52578022600C316E8 /* UserProfileV5Migrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileV5Migrator.swift; sourceTree = "<group>"; };
 		BBE24F10253A065D00C23435 /* Event+UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+UserProfile.swift"; sourceTree = "<group>"; };
 		BBE6C4CC2538B9220085876E /* AEPUserProfile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPUserProfile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBE6C4CF2538B9220085876E /* AEPUserProfile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPUserProfile.h; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 				BBE6C4D02538B9220085876E /* Info.plist */,
 				BBE6C4F82538DC740085876E /* UserProfile+PublicAPI.swift */,
 				BBE24F10253A065D00C23435 /* Event+UserProfile.swift */,
+				BB87E3C52578022600C316E8 /* UserProfileV5Migrator.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -503,6 +506,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB87E3C62578022600C316E8 /* UserProfileV5Migrator.swift in Sources */,
 				BBE6C4F92538DC740085876E /* UserProfile+PublicAPI.swift in Sources */,
 				BBE6C4EB2538B9790085876E /* UserProfileConstants.swift in Sources */,
 				BBE6C4EC2538B9790085876E /* UserProfile.swift in Sources */,
