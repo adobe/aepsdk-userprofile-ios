@@ -7,17 +7,17 @@ Pod::Spec.new do |s|
                         DESC
   s.homepage         = "https://github.com/adobe/aepsdk-userprofile-ios"
   s.license          = 'Apache V2'
-  s.author       = "Adobe Experience Platform SDK Team"
+  s.author           = "Adobe Experience Platform SDK Team"
   s.source           = { :git => "https://github.com/adobe/aepsdk-userprofile-ios", :tag => s.version.to_s }
 
   s.ios.deployment_target = '10.0'
 
-  s.swift_version = '5.1'
+  s.swift_version    = '5.1'
 
   s.pod_target_xcconfig = { 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES' }
 
-  s.dependency 'AEPCore'
-  s.dependency 'AEPServices'
+  s.dependency 'AEPCore', '3.0.0-beta.3'
+  s.dependency 'AEPServices', '3.0.0-beta.3'
 
   s.source_files          = 'AEPUserProfile/Sources/**/*.swift'
 
