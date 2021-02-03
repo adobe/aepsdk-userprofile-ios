@@ -17,11 +17,11 @@ By using the Beta, you hereby acknowledge that the Beta is provided "as is" with
 
 The Adobe Experience Platform UserProfile Mobile Extension is an extension for the [Adobe Experience Platform SDK](https://github.com/Adobe-Marketing-Cloud/acp-sdks).
 
-To learn more about this extension, read [Adobe Experience Platform Edge Mobile Extension](https://aep-sdks.gitbook.io/docs/using-mobile-extensions/profile).
+To learn more about this extension, read [Adobe Experience Platform Profile Mobile Extension](https://aep-sdks.gitbook.io/docs/using-mobile-extensions/profile).
 
 ## Requirements
-- Xcode 11.x
-- Swift 5.x
+- Xcode 11.0 (or newer)
+- Swift 5.1 (or newer)
 
 ## Installation
 
@@ -29,13 +29,17 @@ To learn more about this extension, read [Adobe Experience Platform Edge Mobile 
 
 ```ruby
 # Podfile
+
 use_frameworks!
 
+# for app development, include all the following pods
 target 'YOUR_TARGET_NAME' do
-    pod 'AEPUserProfile', :git => 'git@github.com:adobe/aepsdk-userprofile-ios.git', :branch => 'main'
-    pod 'AEPCore', :git => 'git@github.com:adobe/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPServices', :git => 'git@github.com:adobe/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPRulesEngine', :git => 'git@github.com:adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+    pod 'AEPCore'
+end
+
+# for extension development, include AEPCore and its dependencies
+target 'YOUR_TARGET_NAME' do
+    pod 'AEPCore'
 end
 ```
 
