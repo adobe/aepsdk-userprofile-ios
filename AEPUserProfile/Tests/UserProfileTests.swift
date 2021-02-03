@@ -419,6 +419,17 @@ class UserProfileTests: XCTestCase {
 }
 
 public class TestableExtensionRuntime: ExtensionRuntime {
+    public func createXDMSharedState(data _: [String: Any], event _: Event?) {}
+
+    public func createPendingXDMSharedState(event _: Event?) -> SharedStateResolver {
+        { _ in
+        }
+    }
+
+    public func getXDMSharedState(extensionName _: String, event _: Event?) -> SharedStateResult? {
+        nil
+    }
+
     public var listeners: [String: EventListener] = [:]
     public var createdSharedStates: [[String: Any]?] = []
     public var dispatchedEvents: [Event] = []
@@ -442,10 +453,10 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     }
 
     public func createPendingSharedState(event _: Event?) -> SharedStateResolver {
-        return { _ in
+        { _ in
             print()
         }
     }
 
-    public func getSharedState(extensionName _: String, event _: Event?, barrier _: Bool) -> SharedStateResult? { return nil }
+    public func getSharedState(extensionName _: String, event _: Event?, barrier _: Bool) -> SharedStateResult? { nil }
 }

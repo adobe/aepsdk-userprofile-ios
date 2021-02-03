@@ -18,15 +18,13 @@ let package = Package(
     platforms: [.iOS(.v10)],
     products: [
         .library(name: "AEPUserProfile", targets: ["AEPUserProfile"]),
-        .library(name: "AEPUserProfileStatic", type: .static, targets: ["AEPUserProfile"]),
-        .library(name: "AEPUserProfileDynamic", type: .dynamic, targets: ["AEPUserProfile"]),
     ],
     dependencies: [
         .package(url: "https://github.com/adobe/aepsdk-core-ios.git", .branch("main")),
     ],
     targets: [
         .target(name: "AEPUserProfile",
-                dependencies: ["AEPCore", "AEPServices"],
+                dependencies: ["AEPCore"],
                 path: "AEPUserProfile/Sources"),
     ]
 )

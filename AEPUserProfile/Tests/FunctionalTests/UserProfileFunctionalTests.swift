@@ -17,7 +17,7 @@ import XCTest
 class UserProfileFunctionalTests: XCTestCase {
     private var theExpectation: XCTestExpectation?
     private var v5Defaults: UserDefaults {
-        return UserDefaults(suiteName: "com.adobe.mobile.datastore") ?? UserDefaults.standard
+        UserDefaults(suiteName: "com.adobe.mobile.datastore") ?? UserDefaults.standard
     }
 
     override func setUpWithError() throws {
@@ -362,11 +362,11 @@ public class MonitorExtension: NSObject, Extension {
     public func onUnregistered() {}
 
     public var userProfileSharedStateData: [String: Any]? {
-        return getSharedState(extensionName: "com.adobe.module.userProfile", event: nil)?.value
+        getSharedState(extensionName: "com.adobe.module.userProfile", event: nil)?.value
     }
 
     public func readyForEvent(_: Event) -> Bool {
-        return true
+        true
     }
 
     public required init(runtime: ExtensionRuntime) {
