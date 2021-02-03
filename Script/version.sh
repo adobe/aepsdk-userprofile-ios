@@ -24,23 +24,15 @@ BLUE='\033[0;34m'
 echo "Start to check the version in podspec file >"
 echo "Expected to release:"
 echo "  - AEPProfile: ${BLUE}$1${NC}"
-echo "  - Dependencies:"
-echo "    - AEPCore: ${BLUE}$2${NC}"
-echo "    - AEPService: ${BLUE}$3${NC}"
 
 PODSPEC_VERSION=$(pod ipc spec AEPUserProfile.podspec | jq '.version' | tr -d '"')
-CORE_VERSION=$(pod ipc spec AEPUserProfile.podspec | jq '.dependencies.AEPCore[0]' | tr -d '"')
-SERVICE_VERSION=$(pod ipc spec AEPUserProfile.podspec | jq '.dependencies.AEPServices[0]' | tr -d '"')
 echo "Local podspec:"
 echo " - version: ${BLUE}${PODSPEC_VERSION}${NC}"
-echo " - depdendencies:"
-echo "   - AEPCore: ${BLUE}${CORE_VERSION}${NC}"
-echo "   - AEPService: ${BLUE}${SERVICE_VERSION}${NC}"
 
 SOUCE_CODE_VERSION=$(cat ./AEPUserProfile/Sources/UserProfileConstants.swift | egrep '\s*EXTENSION_VERSION\s*=\s*\"(.*)\"' | ruby -e "puts gets.scan(/\"(.*)\"/)[0] " | tr -d '"')
 echo "Souce code version - ${BLUE}${SOUCE_CODE_VERSION}${NC}"
 
-if [[ "$1" == "$PODSPEC_VERSION" ]] && [[ "$1" == "$SOUCE_CODE_VERSION" ]] && [[ "$2" == "$CORE_VERSION" ]] && [[ "$3" == "$SERVICE_VERSION" ]]; then
+if [[ "$1" == "$PODSPEC_VERSION" ]] && [[ "$1" == "$SOUCE_CODE_VERSION" ]]; then
     echo "${GREEN}Pass!"
     exit 0
 else

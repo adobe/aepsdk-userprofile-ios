@@ -64,9 +64,9 @@ podspec-local-dependency-version:
 version-source-code:
 	(cat ./AEPUserProfile/Sources/UserProfileConstants.swift | egrep '\s*EXTENSION_VERSION\s*=\s*\"(.*)\"' | ruby -e "puts gets.scan(/\"(.*)\"/)[0] " | tr -d '"')
 
-# make check-version VERSION=3.0.0-beta.1 AEPCore_V=3.0.0-beta.3 AEPSerivce_V=3.0.0-beta.3
+# make check-version VERSION=3.0.0-beta.1
 check-version:
-	(sh ./script/version.sh $(VERSION) $(AEPCore_V) $(AEPSerivce_V))
+	(sh ./script/version.sh $(VERSION))
 
 test-SPM-integration:
 	(sh ./script/test-SPM.sh)
