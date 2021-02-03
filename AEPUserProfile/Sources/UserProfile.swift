@@ -61,7 +61,7 @@ public class UserProfile: NSObject, Extension {
     public func onUnregistered() {}
 
     public func readyForEvent(_: Event) -> Bool {
-        return true
+        true
     }
 
     // MARK: - Event Listeners

@@ -17,52 +17,52 @@ extension Event {
     // MARK: - UserProfile Request
 
     var isUpdateAttributesEvent: Bool {
-        return data?[UserProfileConstants.UserProfile.EventDataKeys.UPDATE_DATA] != nil
+        data?[UserProfileConstants.UserProfile.EventDataKeys.UPDATE_DATA] != nil
     }
 
     var isGetAttributesEvent: Bool {
-        return data?[UserProfileConstants.UserProfile.EventDataKeys.GET_DATA_ATTRIBUTES] != nil
+        data?[UserProfileConstants.UserProfile.EventDataKeys.GET_DATA_ATTRIBUTES] != nil
     }
 
     // MARK: - RulesEngine Response
 
     var isRulesConsequenceEvent: Bool {
-        return data?[UserProfileConstants.RulesEngine.EventDataKeys.TRIGGERED_CONSEQUENCE] != nil
+        data?[UserProfileConstants.RulesEngine.EventDataKeys.TRIGGERED_CONSEQUENCE] != nil
     }
 
     // MARK: - Consequence Data
 
     private var consequence: [String: Any]? {
-        return data?[UserProfileConstants.RulesEngine.EventDataKeys.TRIGGERED_CONSEQUENCE] as? [String: Any]
+        data?[UserProfileConstants.RulesEngine.EventDataKeys.TRIGGERED_CONSEQUENCE] as? [String: Any]
     }
 
     var consequenceType: String? {
-        return consequence?[UserProfileConstants.RulesEngine.EventDataKeys.TYPE] as? String
+        consequence?[UserProfileConstants.RulesEngine.EventDataKeys.TYPE] as? String
     }
 
     private var detail: [String: Any]? {
-        return consequence?[UserProfileConstants.RulesEngine.EventDataKeys.DETAIL] as? [String: Any]
+        consequence?[UserProfileConstants.RulesEngine.EventDataKeys.DETAIL] as? [String: Any]
     }
 
     var detailKey: String? {
-        return detail?[UserProfileConstants.RulesEngine.EventDataKeys.DETAIL_KEY] as? String
+        detail?[UserProfileConstants.RulesEngine.EventDataKeys.DETAIL_KEY] as? String
     }
 
     var detailValue: String? {
-        return detail?[UserProfileConstants.RulesEngine.EventDataKeys.DETAIL_VALUE] as? String
+        detail?[UserProfileConstants.RulesEngine.EventDataKeys.DETAIL_VALUE] as? String
     }
 
     var detailOperation: String? {
-        return detail?[UserProfileConstants.RulesEngine.EventDataKeys.DETAIL_OPERATION] as? String
+        detail?[UserProfileConstants.RulesEngine.EventDataKeys.DETAIL_OPERATION] as? String
     }
 
     // MARK: - Error Response Data
 
     var isErrorResponseEvent: Bool {
-        return data?[UserProfileConstants.UserProfile.EventDataKeys.ERROR_RESPONSE] != nil
+        data?[UserProfileConstants.UserProfile.EventDataKeys.ERROR_RESPONSE] != nil
     }
 
     var errorMessage: String? {
-        return data?[UserProfileConstants.UserProfile.EventDataKeys.ERROR_MESSAGE] as? String
+        data?[UserProfileConstants.UserProfile.EventDataKeys.ERROR_MESSAGE] as? String
     }
 }

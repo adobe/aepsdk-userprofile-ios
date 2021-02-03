@@ -442,10 +442,10 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     }
 
     public func createPendingSharedState(event _: Event?) -> SharedStateResolver {
-        return { _ in
+        { _ in
             print()
         }
     }
 
-    public func getSharedState(extensionName _: String, event _: Event?, barrier _: Bool) -> SharedStateResult? { return nil }
+    public func getSharedState(extensionName _: String, event _: Event?, barrier _: Bool) -> SharedStateResult? { nil }
 }
