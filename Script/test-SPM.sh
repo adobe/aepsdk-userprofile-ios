@@ -29,13 +29,20 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(name: \"AEPRulesEngine\", path: \"../\"),
+        .package(name: \"AEPCore\", url: \"https://github.com/adobe/aepsdk-core-ios.git\", .branch(\"main\")),
+        .package(name: \"AEPUserProfile\", path: \"../\")
     ],
     targets: [
         .target(
             name: \"TestProject\",
             dependencies: [
-                .product(name: \"AEPRulesEngine\", package: \"AEPRulesEngine\")])
+                .product(name: \"AEPCore\", package: \"AEPCore\"),
+                .product(name: \"AEPIdentity\", package: \"AEPCore\"),
+                .product(name: \"AEPLifecycle\", package: \"AEPCore\"),
+                .product(name: \"AEPServices\", package: \"AEPCore\"),
+                .product(name: \"AEPSignal\", package: \"AEPCore\"),
+                .product(name: \"AEPUserProfile\", package: \"AEPUserProfile\"),
+                ])
     ]
 )
 " >Package.swift
