@@ -49,13 +49,19 @@ public class UserProfile: NSObject, Extension {
         registerListener(type: EventType.userProfile, source: EventSource.requestReset, listener: removeAttributes(event:))
         registerListener(type: EventType.rulesEngine, source: EventSource.responseContent, listener: handleRulesEngineResponse(event:))
         loadAttributes()
+        if let existingAttributes = UserProfileV5Migrator.existingAttributes() {
+            Log.trace(label: UserProfile.LOG_TAG, "Data migration starts")
+            attributes.merge(existingAttributes) { old, _ in old }
+            persistAttributes()
+            UserProfileV5Migrator.clearExistingAttributes()
+        }
         createSharedState()
     }
 
     public func onUnregistered() {}
 
     public func readyForEvent(_: Event) -> Bool {
-        return true
+        true
     }
 
     // MARK: - Event Listeners

@@ -377,9 +377,59 @@ class UserProfileTests: XCTestCase {
         XCTAssertEqual(["key1": "value1", "key2": "value2"], storedAttributes)
         XCTAssertEqual(0, runtime.createdSharedStates.count)
     }
+
+    func testV5MigratorLoadExistingAttributes() throws {
+        let json = """
+        {
+          "d" : {
+            "a2" : "yy",
+            "a1" : "xx"
+          },
+          "b" : 123,
+          "c" : [
+            1,
+            2
+          ],
+          "a" : "aaa"
+        }
+        """
+        UserDefaults.standard.set(json, forKey: "Adobe.ADBUserProfile.user_profile")
+        guard let attributes = UserProfileV5Migrator.existingAttributes() else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("aaa", attributes["a"] as? String)
+        XCTAssertEqual(123, attributes["b"] as? Int)
+        XCTAssertEqual([1, 2], attributes["c"] as? [Int])
+        XCTAssertEqual(["a1": "xx", "a2": "yy"], attributes["d"] as? [String: String])
+    }
+
+    func testV5MigratorLoadExistingAttributesWithIncorrectFormat() throws {
+        let json = """
+        {
+          "d"
+        }
+        """
+        UserDefaults.standard.set(json, forKey: "Adobe.ADBUserProfile.user_profile")
+        guard let _ = UserProfileV5Migrator.existingAttributes() else {
+            return
+        }
+        XCTFail()
+    }
 }
 
 public class TestableExtensionRuntime: ExtensionRuntime {
+    public func createXDMSharedState(data _: [String: Any], event _: Event?) {}
+
+    public func createPendingXDMSharedState(event _: Event?) -> SharedStateResolver {
+        { _ in
+        }
+    }
+
+    public func getXDMSharedState(extensionName _: String, event _: Event?) -> SharedStateResult? {
+        nil
+    }
+
     public var listeners: [String: EventListener] = [:]
     public var createdSharedStates: [[String: Any]?] = []
     public var dispatchedEvents: [Event] = []
@@ -403,10 +453,10 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     }
 
     public func createPendingSharedState(event _: Event?) -> SharedStateResolver {
-        return { _ in
+        { _ in
             print()
         }
     }
 
-    public func getSharedState(extensionName _: String, event _: Event?, barrier _: Bool) -> SharedStateResult? { return nil }
+    public func getSharedState(extensionName _: String, event _: Event?, barrier _: Bool) -> SharedStateResult? { nil }
 }
