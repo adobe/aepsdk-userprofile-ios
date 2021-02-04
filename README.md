@@ -1,8 +1,7 @@
 # AEPUserProfile
 
-<!--
-on [![Cocoapods](https://img.shields.io/cocoapods/v/AEPCore.svg?color=orange&label=AEPCore&logo=apple&logoColor=white)](https://cocoapods.org/pods/AEPUserprofile)
--->
+[![Cocoapods](https://img.shields.io/cocoapods/v/AEPUserProfile.svg?color=orange&label=AEPUserProfile&logo=apple&logoColor=white)](https://cocoapods.org/pods/AEPUserProfile)
+
 [![SPM](https://img.shields.io/badge/SPM-Supported-orange.svg?logo=apple&logoColor=white)](https://swift.org/package-manager/)
 [![Actions Status](https://github.com/adobe/aepsdk-userprofile-ios/workflows/Build/badge.svg)](https://github.com/adobe/aepsdk-userprofile-ios/actions)
 [![Code Coverage](https://img.shields.io/codecov/c/github/adobe/aepsdk-userprofile-ios/dev.svg?logo=codecov)](https://codecov.io/gh/adobe/aepsdk-userprofile-ios/branch/dev)
@@ -11,7 +10,7 @@ on [![Cocoapods](https://img.shields.io/cocoapods/v/AEPCore.svg?color=orange&lab
 
 The Adobe Experience Platform UserProfile Mobile Extension is an extension for the [Adobe Experience Platform SDK](https://github.com/Adobe-Marketing-Cloud/acp-sdks).
 
-To learn more about this extension, read [Adobe Experience Platform Profile Mobile Extension](https://aep-sdks.gitbook.io/docs/using-mobile-extensions/profile).
+To learn more about this extension, read [Adobe Experience Platform Profile Mobile Extension](https://aep-sdks.gitbook.io/docs/v/AEP-Edge-Docs/).
 
 ## Requirements
 - Xcode 11.0 (or newer)
