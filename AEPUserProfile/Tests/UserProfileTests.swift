@@ -404,6 +404,34 @@ class UserProfileTests: XCTestCase {
         XCTAssertEqual(["a1": "xx", "a2": "yy"], attributes["d"] as? [String: String])
     }
 
+    func testV5MigratorLoadExistingAttributesWithAppGroupPresented() throws {
+        let appGroup = "app_group_1"
+        let json = """
+        {
+          "d" : {
+            "a2" : "yy",
+            "a1" : "xx"
+          },
+          "b" : 123,
+          "c" : [
+            1,
+            2
+          ],
+          "a" : "aaa"
+        }
+        """
+        UserDefaults(suiteName: appGroup)?.set(json, forKey: "Adobe.ADBUserProfile.user_profile")
+        MobileCore.setAppGroup(appGroup)
+        guard let attributes = UserProfileV5Migrator.existingAttributes() else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("aaa", attributes["a"] as? String)
+        XCTAssertEqual(123, attributes["b"] as? Int)
+        XCTAssertEqual([1, 2], attributes["c"] as? [Int])
+        XCTAssertEqual(["a1": "xx", "a2": "yy"], attributes["d"] as? [String: String])
+    }
+
     func testV5MigratorLoadExistingAttributesWithIncorrectFormat() throws {
         let json = """
         {
@@ -419,6 +447,10 @@ class UserProfileTests: XCTestCase {
 }
 
 public class TestableExtensionRuntime: ExtensionRuntime {
+    public func getXDMSharedState(extensionName _: String, event _: Event?, barrier _: Bool) -> SharedStateResult? {
+        nil
+    }
+
     public func createXDMSharedState(data _: [String: Any], event _: Event?) {}
 
     public func createPendingXDMSharedState(event _: Event?) -> SharedStateResolver {

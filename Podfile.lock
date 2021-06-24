@@ -1,9 +1,9 @@
 PODS:
-  - AEPCore (3.0.0):
-    - AEPRulesEngine (= 1.0.0)
-    - AEPServices (= 3.0.0)
-  - AEPRulesEngine (1.0.0)
-  - AEPServices (3.0.0)
+  - AEPCore (3.2.1):
+    - AEPRulesEngine (= 1.0.1)
+    - AEPServices (= 3.2.1)
+  - AEPRulesEngine (1.0.1)
+  - AEPServices (3.2.1)
 
 DEPENDENCIES:
   - AEPCore
@@ -17,9 +17,9 @@ SPEC REPOS:
     - AEPServices
 
 SPEC CHECKSUMS:
-  AEPCore: 9ced1f1fddcbfd61517461e548e36aee740bf7c8
-  AEPRulesEngine: 8bbc694fce6900cd33b2496c7d4b33ee2eeffc46
-  AEPServices: 21ea64149483fdfbd5f88f546b9f5ad7d4987400
+  AEPCore: 1c7a38cbd0e31c013bd4ca388a0a1cb03e9e0432
+  AEPRulesEngine: 5075ed294026a12e37bd26fe260f74604d205354
+  AEPServices: dd322612b8dda359877d6006c98887267f296e06
 
 PODFILE CHECKSUM: cb4291c6eb5d180aa3ea5f46a4c2a7e0191bc077
 

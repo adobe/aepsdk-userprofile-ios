@@ -15,8 +15,15 @@ import AEPServices
 import Foundation
 
 enum UserProfileV5Migrator {
+    private static var userDefaultsV5: UserDefaults {
+        if let v5AppGroup = ServiceProvider.shared.namedKeyValueService.getAppGroup(), !v5AppGroup.isEmpty {
+            return UserDefaults(suiteName: v5AppGroup) ?? UserDefaults.standard
+        }
+        return UserDefaults.standard
+    }
+
     static func existingAttributes() -> [String: Any]? {
-        guard let json = UserDefaults.standard.object(forKey: UserProfileConstants.V5Migration.USER_PROFILE_KEY) as? String else {
+        guard let json = userDefaultsV5.object(forKey: UserProfileConstants.V5Migration.USER_PROFILE_KEY) as? String else {
             return nil
         }
         guard let jsonData = json.data(using: .utf8), let attributes = try? JSONDecoder().decode([String: AnyCodable].self, from: jsonData) else {
@@ -27,6 +34,6 @@ enum UserProfileV5Migrator {
     }
 
     static func clearExistingAttributes() {
-        UserDefaults.standard.removeObject(forKey: UserProfileConstants.V5Migration.USER_PROFILE_KEY)
+        userDefaultsV5.removeObject(forKey: UserProfileConstants.V5Migration.USER_PROFILE_KEY)
     }
 }

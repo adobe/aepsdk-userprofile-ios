@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "AEPUserProfile"
-  s.version          = "3.0.0"
+  s.version          = "3.0.1"
   s.summary          = "Experience Platform UserProfile extension for Adobe Experience Platform Mobile SDK. Written and maintained by Adobe."
   s.description      = <<-DESC
                         The Experience Platform UserProfile extension provides APIs that allow use of the custom client-side User Profile in the Adobe Experience Platform SDK.
