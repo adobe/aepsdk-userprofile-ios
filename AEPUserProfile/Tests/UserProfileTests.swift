@@ -393,6 +393,7 @@ class UserProfileTests: XCTestCase {
           "a" : "aaa"
         }
         """
+        MobileCore.setAppGroup(nil)
         UserDefaults.standard.set(json, forKey: "Adobe.ADBUserProfile.user_profile")
         guard let attributes = UserProfileV5Migrator.existingAttributes() else {
             XCTFail()
@@ -438,6 +439,7 @@ class UserProfileTests: XCTestCase {
           "d"
         }
         """
+        MobileCore.setAppGroup(nil)
         UserDefaults.standard.set(json, forKey: "Adobe.ADBUserProfile.user_profile")
         guard let _ = UserProfileV5Migrator.existingAttributes() else {
             return
