@@ -64,7 +64,7 @@ podspec-local-dependency-version:
 version-source-code:
 	(cat ./AEPUserProfile/Sources/UserProfileConstants.swift | egrep '\s*EXTENSION_VERSION\s*=\s*\"(.*)\"' | ruby -e "puts gets.scan(/\"(.*)\"/)[0] " | tr -d '"')
 
-# make check-version VERSION=3.0.0
+# make check-version VERSION=3.0.1
 check-version:
 	(sh ./script/version.sh $(VERSION))
 
