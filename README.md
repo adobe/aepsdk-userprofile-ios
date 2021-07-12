@@ -44,13 +44,13 @@ To add the AEPUserProfile Package to your application, from the Xcode menu selec
 
 Enter the URL for the AEPUserProfile package repository: `https://github.com/adobe/aepsdk-userprofile-ios.git`.
 
-When prompted, make sure you change the branch to `main`. 
+When prompted, input a specific version or a range of versions for Version rule. 
 
 Alternatively, if your project has a `Package.swift` file, you can add AEPUserProfile directly to your dependencies:
 
 ```
 dependencies: [
-    .package(url: "https://github.com/adobe/aepsdk-userprofile-ios.git", .branch("main")),
+    .package(url: "https://github.com/adobe/aepsdk-userprofile-ios.git", .upToNextMajor(from: "3.0.0")),
 ],
 targets: [
     .target(name: "YourTarget",
