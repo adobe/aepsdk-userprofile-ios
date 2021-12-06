@@ -7,10 +7,10 @@ SIMULATOR_ARCHIVE_PATH = ./build/ios_simulator.xcarchive/Products/Library/Framew
 IOS_ARCHIVE_PATH = ./build/ios.xcarchive/Products/Library/Frameworks/
 
 lint-autocorrect:
-	swiftlint autocorrect
+	./Pods/SwiftLint/swiftlint autocorrect
 
 lint:
-	swiftlint lint
+	./Pods/SwiftLint/swiftlint lint
 
 check-format:
 	swiftformat --lint AEPUserProfile/Sources

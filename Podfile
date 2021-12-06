@@ -7,6 +7,8 @@ use_frameworks!
 workspace 'AEPUserProfile'
 project 'AEPUserProfile.xcodeproj'
 
+pod 'SwiftLint', '0.44.0'
+
 target 'AEPUserProfile' do
   pod 'AEPCore'
   pod 'AEPServices'
