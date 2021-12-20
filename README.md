@@ -28,11 +28,13 @@ use_frameworks!
 # for app development, include all the following pods
 target 'YOUR_TARGET_NAME' do
     pod 'AEPCore'
+    pod 'AEPUserProfile'
 end
 
 # for extension development, include AEPCore and its dependencies
 target 'YOUR_TARGET_NAME' do
     pod 'AEPCore'
+    pod 'AEPUserProfile'
 end
 ```
 

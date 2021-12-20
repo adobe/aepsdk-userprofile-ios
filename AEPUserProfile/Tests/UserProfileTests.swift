@@ -467,7 +467,6 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public var listeners: [String: EventListener] = [:]
     public var createdSharedStates: [[String: Any]?] = []
     public var dispatchedEvents: [Event] = []
-
     public func unregisterExtension() {}
 
     public func registerListener(type: String, source: String, listener: @escaping EventListener) {
