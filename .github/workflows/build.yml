@@ -29,15 +29,12 @@ jobs:
     - name: Install swiftformat
       run: brew install swiftformat
 
-    - name: Install SwiftLint
-      run: which swiftLint || brew install swiftlint
+    - name: pod install
+      run: make pod-install
        
     - name: Linting
       run: make lint; make check-format
 
-    - name: pod install
-      run: make pod-install
-      
     - name: Run tests
       run: make test
 

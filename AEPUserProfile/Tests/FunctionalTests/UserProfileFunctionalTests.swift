@@ -341,7 +341,7 @@ public class MonitorExtension: NSObject, Extension {
         MonitorExtension.instance = self
         registerListener(type: "com.adobe.eventType.hub", source: "com.adobe.eventSource.sharedState") {
             event in
-            if event.name == "Shared state change", let owner = event.data?["stateowner"] as? String, owner == "com.adobe.module.userProfile" {
+            if let owner = event.data?["stateowner"] as? String, owner == "com.adobe.module.userProfile" {
                 MonitorExtension.sharedStateChanged += 1
                 if let receiver = MonitorExtension.profileSharedStateReceiver {
                     receiver(event)

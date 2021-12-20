@@ -11,10 +11,10 @@ IOS_ARCHIVE_PATH = ./build/ios.xcarchive/Products/Library/Frameworks/
 IOS_ARCHIVE_DSYM_PATH = $(CURR_DIR)/build/ios.xcarchive/dSYMs/
 
 lint-autocorrect:
-	swiftlint autocorrect
+	./Pods/SwiftLint/swiftlint autocorrect
 
 lint:
-	swiftlint lint
+	./Pods/SwiftLint/swiftlint lint
 
 check-format:
 	swiftformat --lint AEPUserProfile/Sources
@@ -67,7 +67,7 @@ podspec-local-dependency-version:
 version-source-code:
 	(cat ./AEPUserProfile/Sources/UserProfileConstants.swift | egrep '\s*EXTENSION_VERSION\s*=\s*\"(.*)\"' | ruby -e "puts gets.scan(/\"(.*)\"/)[0] " | tr -d '"')
 
-# make check-version VERSION=3.0.0
+# make check-version VERSION=3.0.1
 check-version:
 	(sh ./script/version.sh $(VERSION))
 
