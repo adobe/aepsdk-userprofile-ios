@@ -419,6 +419,14 @@ class UserProfileTests: XCTestCase {
 }
 
 public class TestableExtensionRuntime: ExtensionRuntime {
+    public func getXDMSharedState(extensionName: String, event: Event?, barrier _: Bool) -> SharedStateResult? {
+        // if there is an shared state setup for the specific (extension, event id) pair, return it. Otherwise, return the shared state that is setup for the extension.
+        if let id = event?.id {
+            return mockedXdmSharedStates["\(extensionName)-\(id)"] ?? mockedXdmSharedStates["\(extensionName)"]
+        }
+        return mockedXdmSharedStates["\(extensionName)"]
+    }
+
     public func createXDMSharedState(data _: [String: Any], event _: Event?) {}
 
     public func createPendingXDMSharedState(event _: Event?) -> SharedStateResolver {
@@ -433,7 +441,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public var listeners: [String: EventListener] = [:]
     public var createdSharedStates: [[String: Any]?] = []
     public var dispatchedEvents: [Event] = []
-
+    public var mockedXdmSharedStates: [String: SharedStateResult] = [:]
     public func unregisterExtension() {}
 
     public func registerListener(type: String, source: String, listener: @escaping EventListener) {
