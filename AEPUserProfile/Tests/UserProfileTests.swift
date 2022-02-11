@@ -449,6 +449,8 @@ class UserProfileTests: XCTestCase {
 }
 
 public class TestableExtensionRuntime: ExtensionRuntime {
+    public func getHistoricalEvents(_ requests: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void) {}
+    
     public func getXDMSharedState(extensionName _: String, event _: Event?, barrier _: Bool) -> SharedStateResult? {
         nil
     }
