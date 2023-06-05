@@ -5,18 +5,18 @@
         "package": "AEPCore",
         "repositoryURL": "https://github.com/adobe/aepsdk-core-ios.git",
         "state": {
-          "branch": "main",
-          "revision": "51a6bd926c8c0beb526604ac0c2bc01b86158cc8",
-          "version": null
+          "branch": null,
+          "revision": "255e3fde7c478a48c57e3f6ee9df1700aae22278",
+          "version": "4.0.0"
         }
       },
       {
         "package": "AEPRulesEngine",
         "repositoryURL": "https://github.com/adobe/aepsdk-rulesengine-ios.git",
         "state": {
-          "branch": "main",
-          "revision": "b2e0247bf57975209997dd9a26fd576b7c420394",
-          "version": null
+          "branch": null,
+          "revision": "0923ec707340874000e06ad2926c5006ddfbc4c9",
+          "version": "4.0.0"
         }
       }
     ]
