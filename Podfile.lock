@@ -1,16 +1,16 @@
 PODS:
-  - AEPCore (3.4.2):
-    - AEPRulesEngine (>= 1.1.0)
-    - AEPServices (>= 3.4.2)
-  - AEPRulesEngine (1.1.0)
-  - AEPServices (3.4.2)
-  - SwiftLint (0.44.0)
+  - AEPCore (4.0.0):
+    - AEPRulesEngine (>= 4.0.0)
+    - AEPServices (>= 4.0.0)
+  - AEPRulesEngine (4.0.0)
+  - AEPServices (4.0.0)
+  - SwiftLint (0.52.0)
 
 DEPENDENCIES:
   - AEPCore
   - AEPRulesEngine
   - AEPServices
-  - SwiftLint (= 0.44.0)
+  - SwiftLint (= 0.52.0)
 
 SPEC REPOS:
   trunk:
@@ -20,11 +20,11 @@ SPEC REPOS:
     - SwiftLint
 
 SPEC CHECKSUMS:
-  AEPCore: b01856bf24972e4720cb0511a358d1e68067252a
-  AEPRulesEngine: bb2927ed5501ddf9754c66e97f8d2b1cf8e33b19
-  AEPServices: 3214311f239c8cdc6267d757200b05ec0ab05878
-  SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
+  AEPCore: dd7cd69696c768c610e6adc0307032985a381c7e
+  AEPRulesEngine: 458450a34922823286ead045a0c2bd8c27e224c6
+  AEPServices: ca493988df250d84fda050124ff7549bcc43c65f
+  SwiftLint: 13280e21cdda6786ad908dc6e416afe5acd1fcb7
 
-PODFILE CHECKSUM: 44713863fdab846a5d5610dab713cd058e3ebf2c
+PODFILE CHECKSUM: ec14ffaa71960396fa0253c01cfc329e16e54014
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.12.0

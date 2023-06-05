@@ -11,7 +11,7 @@ IOS_ARCHIVE_PATH = ./build/ios.xcarchive/Products/Library/Frameworks/
 IOS_ARCHIVE_DSYM_PATH = $(CURR_DIR)/build/ios.xcarchive/dSYMs/
 
 lint-autocorrect:
-	./Pods/SwiftLint/swiftlint autocorrect
+	./Pods/SwiftLint/swiftlint --fix
 
 lint:
 	./Pods/SwiftLint/swiftlint lint
@@ -44,12 +44,17 @@ test: clean
 	@echo "######################################################################"
 	@echo "### Testing iOS"
 	@echo "######################################################################"
-	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(PROJECT_NAME)Tests -destination 'platform=iOS Simulator,name=iPhone 11 Pro' -derivedDataPath build/out -enableCodeCoverage YES
+	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(PROJECT_NAME)Tests -destination 'platform=iOS Simulator,name=iPhone 14' -derivedDataPath build/out -enableCodeCoverage YES
 
-archive: pod-update
+archive: clean pod-update
 	xcodebuild archive -workspace $(PROJECT_NAME).xcworkspace -scheme $(SCHEME_NAME_XCFRAMEWORK) -archivePath "./build/ios.xcarchive" -sdk iphoneos -destination="iOS" SKIP_INSTALL=NO BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
 	xcodebuild archive -workspace $(PROJECT_NAME).xcworkspace -scheme $(SCHEME_NAME_XCFRAMEWORK) -archivePath "./build/ios_simulator.xcarchive" -sdk iphonesimulator -destination="iOS Simulator" SKIP_INSTALL=NO BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
 	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(EXTENSION_NAME).framework -debug-symbols $(SIMULATOR_ARCHIVE_DSYM_PATH)$(EXTENSION_NAME).framework.dSYM -framework $(IOS_ARCHIVE_PATH)$(EXTENSION_NAME).framework -debug-symbols $(IOS_ARCHIVE_DSYM_PATH)$(EXTENSION_NAME).framework.dSYM -output ./build/$(TARGET_NAME_XCFRAMEWORK)
+
+zip:
+	cd build && zip -r $(EXTENSION_NAME).xcframework.zip $(EXTENSION_NAME).xcframework/
+	swift package compute-checksum build/$(EXTENSION_NAME).xcframework.zip
+
 latest-version:
 	(which jq)
 	(pod spec cat AEPUserProfile | jq '.version' | tr -d '"')

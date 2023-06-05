@@ -1,10 +1,9 @@
 # AEPUserProfile
 
-[![Cocoapods](https://img.shields.io/cocoapods/v/AEPUserProfile.svg?color=orange&label=AEPUserProfile&logo=apple&logoColor=white)](https://cocoapods.org/pods/AEPUserProfile)
-
-[![SPM](https://img.shields.io/badge/SPM-Supported-orange.svg?logo=apple&logoColor=white)](https://swift.org/package-manager/)
-[![Actions Status](https://github.com/adobe/aepsdk-userprofile-ios/workflows/Build/badge.svg)](https://github.com/adobe/aepsdk-userprofile-ios/actions)
-[![Code Coverage](https://img.shields.io/codecov/c/github/adobe/aepsdk-userprofile-ios/dev.svg?logo=codecov)](https://codecov.io/gh/adobe/aepsdk-userprofile-ios/branch/dev)
+[![Cocoapods](https://img.shields.io/github/v/release/adobe/aepsdk-userprofile-ios?label=Cocoapods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPUserProfile)
+[![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-userprofile-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-userprofile-ios/releases)
+[![Build](https://github.com/adobe/aepsdk-userprofile-ios/actions/workflows/build.yml/badge.svg)](https://github.com/adobe/aepsdk-userprofile-ios/actions/workflows/build.yml)
+[![Code Coverage](https://img.shields.io/codecov/c/github/adobe/aepsdk-userprofile-ios/main.svg?label=Coverage&logo=codecov)](https://codecov.io/gh/adobe/aepsdk-userprofile-ios/branch/main)
 
 ## About this project
 
@@ -13,7 +12,7 @@ The Adobe Experience Platform UserProfile Mobile Extension is an extension for t
 To learn more about this extension, read [Adobe Experience Platform Profile Mobile Extension](https://aep-sdks.gitbook.io/docs/v/AEP-Edge-Docs/).
 
 ## Requirements
-- Xcode 11.0 (or newer)
+- Xcode 14.1 (or newer)
 - Swift 5.1 (or newer)
 
 ## Installation
@@ -52,7 +51,7 @@ Alternatively, if your project has a `Package.swift` file, you can add AEPUserPr
 
 ```
 dependencies: [
-    .package(url: "https://github.com/adobe/aepsdk-userprofile-ios.git", .upToNextMajor(from: "3.0.0")),
+    .package(url: "https://github.com/adobe/aepsdk-userprofile-ios.git", .upToNextMajor(from: "4.0.0")),
 ],
 targets: [
     .target(name: "YourTarget",

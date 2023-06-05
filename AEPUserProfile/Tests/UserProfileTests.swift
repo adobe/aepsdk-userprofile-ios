@@ -66,7 +66,7 @@ class UserProfileTests: XCTestCase {
             XCTFail()
             return
         }
-        let event = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key3", "value": "value3", "operation": "write"]]])
+        let event = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key3", "value": "value3", "operation": "write"]] as [String : Any]])
         handleRulesEngineResponse(event)
         guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
             XCTFail()
@@ -93,7 +93,7 @@ class UserProfileTests: XCTestCase {
             XCTFail()
             return
         }
-        let event = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key1", "value": "", "operation": "write"]]])
+        let event = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key1", "value": "", "operation": "write"]] as [String : Any]])
         handleRulesEngineResponse(event)
         guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
             XCTFail()
@@ -118,7 +118,7 @@ class UserProfileTests: XCTestCase {
             XCTFail()
             return
         }
-        let event = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key1", "operation": "delete"]]])
+        let event = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key1", "operation": "delete"]] as [String : Any]])
         handleRulesEngineResponse(event)
         guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
             XCTFail()
@@ -155,11 +155,11 @@ class UserProfileTests: XCTestCase {
         XCTAssertEqual(1, storedAttributes.count)
         XCTAssertEqual(0, runtime.createdSharedStates.count)
 
-        let consequenceEventWriteWithoutKey = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["value": "value3", "operation": "write"]]])
+        let consequenceEventWriteWithoutKey = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["value": "value3", "operation": "write"]] as [String : Any]])
         handleRulesEngineResponse(consequenceEventWriteWithoutKey)
         XCTAssertEqual(0, runtime.createdSharedStates.count)
 
-        let consequenceEventDeleteWithoutKey = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["operation": "delete"]]])
+        let consequenceEventDeleteWithoutKey = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["operation": "delete"]] as [String : Any]])
         handleRulesEngineResponse(consequenceEventDeleteWithoutKey)
         XCTAssertEqual(0, runtime.createdSharedStates.count)
     }
@@ -223,7 +223,7 @@ class UserProfileTests: XCTestCase {
     }
 
     func testUpdateAttributesWithMultipleValueTypes() throws {
-        UserDefaults.standard.set(["k_string": "value1", "k_int": 2, "k_bool": true, "k_double": 2.1], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        UserDefaults.standard.set(["k_string": "value1", "k_int": 2, "k_bool": true, "k_double": 2.1] as [String : Any], forKey: "Adobe.com.adobe.module.userProfile.attributes")
         let runtime = TestableExtensionRuntime()
         let profile = UserProfile(runtime: runtime)
         profile.onRegistered()
@@ -271,7 +271,7 @@ class UserProfileTests: XCTestCase {
             XCTFail()
             return
         }
-        let event = Event(name: "UserProfileUpdate", type: "com.adobe.eventType.userProfile", source: "com.adobe.eventSource.requestProfile", data: ["userprofileupdatekey": ["key1": "valuex", "key2": UserProfile(runtime: TestableExtensionRuntime())]])
+        let event = Event(name: "UserProfileUpdate", type: "com.adobe.eventType.userProfile", source: "com.adobe.eventSource.requestProfile", data: ["userprofileupdatekey": ["key1": "valuex", "key2": UserProfile(runtime: TestableExtensionRuntime())] as [String : Any]])
         XCTAssert(event.isUpdateAttributesEvent)
 
         handleRequestProfile(event)
@@ -320,7 +320,7 @@ class UserProfileTests: XCTestCase {
             XCTFail()
             return
         }
-        let event = Event(name: "getUserAttributes", type: "com.adobe.eventType.userProfile", source: "com.adobe.eventSource.requestProfile", data: ["userprofilegetattributes": []])
+        let event = Event(name: "getUserAttributes", type: "com.adobe.eventType.userProfile", source: "com.adobe.eventSource.requestProfile", data: ["userprofilegetattributes": [] as NSArray])
         XCTAssert(event.isGetAttributesEvent)
         handleRequestProfile(event)
         XCTAssertEqual(0, runtime.createdSharedStates.count)
@@ -449,6 +449,14 @@ class UserProfileTests: XCTestCase {
 }
 
 public class TestableExtensionRuntime: ExtensionRuntime {
+    public func getSharedState(extensionName: String, event: AEPCore.Event?, barrier: Bool, resolution: AEPCore.SharedStateResolution) -> AEPCore.SharedStateResult? {
+        nil
+    }
+    
+    public func getXDMSharedState(extensionName: String, event: AEPCore.Event?, barrier: Bool, resolution: AEPCore.SharedStateResolution) -> AEPCore.SharedStateResult? {
+        nil
+    }
+    
     public func getHistoricalEvents(_ requests: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void) {}
     
     public func getXDMSharedState(extensionName _: String, event _: Event?, barrier _: Bool) -> SharedStateResult? {
