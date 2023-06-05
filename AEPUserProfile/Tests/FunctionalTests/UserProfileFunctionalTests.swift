@@ -71,7 +71,7 @@ class UserProfileFunctionalTests: XCTestCase {
         // Given
 //        EventHub.shared = EventHub()
         let expectation = self.expectation(description: "register UserProfile extension")
-        UserDefaults.standard.set(["k1": "v1", "k4": 11], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        UserDefaults.standard.set(["k1": "v1", "k4": 11] as [String : Any], forKey: "Adobe.com.adobe.module.userProfile.attributes")
 
         MobileCore.registerExtensions([UserProfile.self]) {
             expectation.fulfill()
@@ -197,7 +197,7 @@ class UserProfileFunctionalTests: XCTestCase {
         waitForExpectations(timeout: 2)
 
         theExpectation = self.expectation(description: "monitor the shared state from UserProfile")
-        let event = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key3", "value": "value3", "operation": "write"]]])
+        let event = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key3", "value": "value3", "operation": "write"]] as [String : Any]])
         MonitorExtension.profileSharedStateReceiver = { _ in
             guard let data = EventHub.shared.getSharedState(extensionName: "com.adobe.module.userProfile", event: event)?.value?["userprofiledata"] as? [String: String] else {
                 return
@@ -228,7 +228,7 @@ class UserProfileFunctionalTests: XCTestCase {
         waitForExpectations(timeout: 2)
 
         theExpectation = self.expectation(description: "monitor the shared state from UserProfile")
-        let event = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key1", "operation": "delete"]]])
+        let event = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key1", "operation": "delete"]] as [String : Any]])
         MonitorExtension.profileSharedStateReceiver = { _ in
             guard let data = EventHub.shared.getSharedState(extensionName: "com.adobe.module.userProfile", event: event)?.value?["userprofiledata"] as? [String: String] else {
                 return
@@ -262,9 +262,9 @@ class UserProfileFunctionalTests: XCTestCase {
         MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["detail": ["key": "key3", "value": "value3", "operation": "write"]]]))
         MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["detail": ["key": "key1", "operation": "delete"]]]))
         MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["detail": ["key": "key2", "operation": "delete"]]]))
-        MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key1", "operation": "add"]]]))
-        MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key3", "operation": "write"]]]))
-        MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["value": "value1", "operation": "delete"]]]))
+        MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key1", "operation": "add"]] as [String : Any]]))
+        MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key3", "operation": "write"]] as [String : Any]]))
+        MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["value": "value1", "operation": "delete"]] as [String : Any]]))
         usleep(9000)
         XCTAssertEqual(1, MonitorExtension.sharedStateChanged)
 
