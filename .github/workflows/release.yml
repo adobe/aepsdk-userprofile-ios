@@ -16,7 +16,7 @@ on:
 
 jobs:
   release_profile:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
     - uses: actions/checkout@v2
       with:
@@ -24,7 +24,7 @@ jobs:
 
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: 14.1
+        xcode-version: 15.0
     
     - name: Install jq
       run: brew install jq
@@ -87,8 +87,8 @@ jobs:
       run: |
         set -eo pipefail
         gem install cocoapods
-        pod lib lint AEPUserProfile.podspec --allow-warnings --swift-version=5.1
-        pod trunk push AEPUserProfile.podspec --allow-warnings --swift-version=5.1
+        pod lib lint AEPUserProfile.podspec --allow-warnings
+        pod trunk push AEPUserProfile.podspec --allow-warnings 
       env:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
         
