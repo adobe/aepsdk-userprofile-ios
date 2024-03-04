@@ -1,30 +1,60 @@
 PODS:
-  - AEPCore (4.0.0):
-    - AEPRulesEngine (>= 4.0.0)
-    - AEPServices (>= 4.0.0)
-  - AEPRulesEngine (4.0.0)
-  - AEPServices (4.0.0)
+  - AEPCore (5.0.0):
+    - AEPRulesEngine (< 6.0.0, >= 5.0.0)
+    - AEPServices (< 6.0.0, >= 5.0.0)
+  - AEPRulesEngine (5.0.0)
+  - AEPServices (5.0.0)
+  - AEPTestUtils (5.0.0):
+    - AEPCore
+    - AEPServices
   - SwiftLint (0.52.0)
 
 DEPENDENCIES:
-  - AEPCore
-  - AEPRulesEngine
-  - AEPServices
+  - AEPCore (from `https://github.com/adobe/aepsdk-core-ios.git`, branch `dev-v5.0.0`)
+  - AEPRulesEngine (from `https://github.com/adobe/aepsdk-rulesengine-ios.git`, branch `dev-v5.0.0`)
+  - AEPServices (from `https://github.com/adobe/aepsdk-core-ios.git`, branch `dev-v5.0.0`)
+  - AEPTestUtils (from `https://github.com/adobe/aepsdk-testutils-ios.git`, branch `main`)
   - SwiftLint (= 0.52.0)
 
 SPEC REPOS:
   trunk:
-    - AEPCore
-    - AEPRulesEngine
-    - AEPServices
     - SwiftLint
 
+EXTERNAL SOURCES:
+  AEPCore:
+    :branch: dev-v5.0.0
+    :git: https://github.com/adobe/aepsdk-core-ios.git
+  AEPRulesEngine:
+    :branch: dev-v5.0.0
+    :git: https://github.com/adobe/aepsdk-rulesengine-ios.git
+  AEPServices:
+    :branch: dev-v5.0.0
+    :git: https://github.com/adobe/aepsdk-core-ios.git
+  AEPTestUtils:
+    :branch: main
+    :git: https://github.com/adobe/aepsdk-testutils-ios.git
+
+CHECKOUT OPTIONS:
+  AEPCore:
+    :commit: 0ddd9204721d22507bd5abac3c7e91c791f7f6a6
+    :git: https://github.com/adobe/aepsdk-core-ios.git
+  AEPRulesEngine:
+    :commit: 01bd861e9df32b4d2dc784b2b94d87835e813c53
+    :git: https://github.com/adobe/aepsdk-rulesengine-ios.git
+  AEPServices:
+    :commit: 0ddd9204721d22507bd5abac3c7e91c791f7f6a6
+    :git: https://github.com/adobe/aepsdk-core-ios.git
+  AEPTestUtils:
+    :commit: 33020333a1e804526dd0d80f4f29e0356e062480
+    :git: https://github.com/adobe/aepsdk-testutils-ios.git
+
 SPEC CHECKSUMS:
-  AEPCore: dd7cd69696c768c610e6adc0307032985a381c7e
-  AEPRulesEngine: 458450a34922823286ead045a0c2bd8c27e224c6
-  AEPServices: ca493988df250d84fda050124ff7549bcc43c65f
+  AEPCore: f1c3e9238bb12e7e1103f4407c341ebc65aeab5b
+  AEPRulesEngine: fe5800653a4bee07b1e41e61b4d5551f0dba557b
+  AEPServices: e42e5118128e81c0f797fdfb1dc9c4a714d644b8
+  AEPTestUtils: 20495b368da57904ca2e9f241d1d8b114f9887b5
   SwiftLint: 13280e21cdda6786ad908dc6e416afe5acd1fcb7
 
-PODFILE CHECKSUM: ec14ffaa71960396fa0253c01cfc329e16e54014
+PODFILE CHECKSUM: 79d1d4d76fa35f84e911fe0c5ef219fc0fc16fca
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.12.1
