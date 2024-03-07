@@ -16,7 +16,7 @@ import Foundation
 
 @objc(AEPMobileUserProfile)
 public class UserProfile: NSObject, Extension {
-    internal static let LOG_TAG = "UserProfile"
+    static let LOG_TAG = "UserProfile"
 
     private let dataStore: NamedCollectionDataStore
     private var attributes: [String: Any]
