@@ -268,7 +268,7 @@ class UserProfileFunctionalTests: XCTestCase {
         MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key1", "operation": "add"]] as [String: Any]]))
         MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key3", "operation": "write"]] as [String: Any]]))
         MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["value": "value1", "operation": "delete"]] as [String: Any]]))
-        usleep(9000)
+        usleep(1000)
         XCTAssertEqual(1, MonitorExtension.sharedStateChanged)
     }
 
