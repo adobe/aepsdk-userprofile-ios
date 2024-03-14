@@ -16,6 +16,7 @@ enum UserProfileConstants {
     static let EXTENSION_NAME = "com.adobe.module.userProfile"
     static let FRIENDLY_NAME = "UserProfile"
     static let EXTENSION_VERSION = "5.0.0"
+
     static let LOG_PREFIX = FRIENDLY_NAME
     static let DATASTORE_NAME = EXTENSION_NAME
     static let DATASTORE_KEY_ATTRIBUTES = "attributes"

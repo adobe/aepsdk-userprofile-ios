@@ -239,6 +239,7 @@ class UserProfileTests: XCTestCase {
 
     func testUpdateAttributesWithMultipleValueTypes() throws {
         setAttributesInDatastore(["k_string": "value1", "k_int": 2, "k_bool": true, "k_double": 2.1])
+
         let runtime = TestableExtensionRuntime()
         let profile = UserProfile(runtime: runtime)
         profile.onRegistered()
