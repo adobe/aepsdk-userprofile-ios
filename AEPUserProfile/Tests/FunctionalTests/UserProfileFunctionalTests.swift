@@ -11,22 +11,35 @@
  */
 
 @testable import AEPCore
+import AEPServices
+import AEPTestUtils
 @testable import AEPUserProfile
 import XCTest
 
 class UserProfileFunctionalTests: XCTestCase {
     private var theExpectation: XCTestExpectation?
-    private var v5Defaults: UserDefaults {
-        UserDefaults(suiteName: "com.adobe.mobile.datastore") ?? UserDefaults.standard
+
+    private let EXTENSION_NAME = "com.adobe.module.userProfile"
+    private let DATASTORE_KEY_ATTRIBUTES = "attributes"
+
+    private func setAttributesInDatastore(_ value: [String: Any]?) {
+        let dataStore = NamedCollectionDataStore(name: EXTENSION_NAME)
+        dataStore.set(key: DATASTORE_KEY_ATTRIBUTES, value: value)
+    }
+
+    private func getAttributesInDatastore() -> [String: Any]? {
+        let dataStore = NamedCollectionDataStore(name: EXTENSION_NAME)
+        return dataStore.getDictionary(key: DATASTORE_KEY_ATTRIBUTES) as? [String: Any]
     }
 
     override func setUpWithError() throws {
         MobileCore.setLogLevel(.trace)
-        UserDefaults.standard.removeObject(forKey: "Adobe.com.adobe.module.userProfile.attributes")
-        UserDefaults.standard.removeObject(forKey: "Adobe.ADBUserProfile.user_profile")
+        NamedCollectionDataStore.clear()
     }
 
     override func tearDownWithError() throws {
+        MobileCore.unregisterExtension(UserProfile.self)
+        MobileCore.unregisterExtension(MonitorExtension.self)
         EventHub.shared = EventHub()
     }
 
@@ -51,14 +64,13 @@ class UserProfileFunctionalTests: XCTestCase {
     }
 
     func testExtensionRegistrationWillCreateSharedState() throws {
-        UserDefaults.standard.set(["key1": "value1"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["key1": "value1"])
         theExpectation = expectation(description: "monitor the shared state from UserProfile")
 
         MonitorExtension.profileSharedStateReceiver = { _ in
             guard let data = MonitorExtension.instance?.userProfileSharedStateData?["userprofiledata"] as? [String: String] else {
                 return
             }
-            XCTAssertEqual(1, data.count)
             XCTAssertEqual(["key1": "value1"], data)
             self.theExpectation?.fulfill()
             MonitorExtension.profileSharedStateReceiver = nil
@@ -69,9 +81,9 @@ class UserProfileFunctionalTests: XCTestCase {
 
     func testUpdateUserAttributesWithAllSupportedTypes() throws {
         // Given
-//        EventHub.shared = EventHub()
         let expectation = self.expectation(description: "register UserProfile extension")
-        UserDefaults.standard.set(["k1": "v1", "k4": 11] as [String: Any], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["k1": "v1", "k4": 11])
+
 
         MobileCore.registerExtensions([UserProfile.self]) {
             expectation.fulfill()
@@ -98,7 +110,7 @@ class UserProfileFunctionalTests: XCTestCase {
     func testUpdateUserAttributesWithEmptyDict() throws {
         // Given
         let expectation = self.expectation(description: "register UserProfile extension")
-        UserDefaults.standard.set(["k1": "v1"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["k1": "v1"])
 
         MobileCore.registerExtensions([UserProfile.self]) {
             expectation.fulfill()
@@ -112,11 +124,9 @@ class UserProfileFunctionalTests: XCTestCase {
         let expectGet = self.expectation(description: "getUserAttributes()")
         UserProfile.getUserAttributes(attributeNames: ["k1"]) {
             attributes, _ in
-            expectGet.fulfill()
             XCTAssertEqual(["k1": "v1"], attributes as? [String: String])
-            let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String]
-            XCTAssertEqual(["k1": "v1"], storedAttributes)
-            MobileCore.unregisterExtension(UserProfile.self)
+            XCTAssertEqual(["k1": "v1"], self.getAttributesInDatastore() as? [String: String])
+            expectGet.fulfill()
         }
         waitForExpectations(timeout: 2)
     }
@@ -124,7 +134,7 @@ class UserProfileFunctionalTests: XCTestCase {
     func testGetUserAttributesWithEmptyDict() throws {
         // Given
         let expectation = self.expectation(description: "register UserProfile extension")
-        UserDefaults.standard.set(["k1": "v1", "k2": "v2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["k1": "v1", "k2": "v2"])
 
         MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {
             expectation.fulfill()
@@ -135,11 +145,9 @@ class UserProfileFunctionalTests: XCTestCase {
         let expectGet = self.expectation(description: "getUserAttributes()")
         UserProfile.getUserAttributes(attributeNames: []) {
             _, error in
-            expectGet.fulfill()
             XCTAssertEqual(AEPError.none, error)
-            let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String]
-            XCTAssertEqual(["k1": "v1", "k2": "v2"], storedAttributes)
-            MobileCore.unregisterExtension(UserProfile.self)
+            XCTAssertEqual(["k1": "v1", "k2": "v2"], self.getAttributesInDatastore() as? [String: String])
+            expectGet.fulfill()
         }
 
         // Then
@@ -148,7 +156,7 @@ class UserProfileFunctionalTests: XCTestCase {
 
     func testRemoveUserAttributes() throws {
         let expectation = self.expectation(description: "register UserProfile extension")
-        UserDefaults.standard.set(["k1": "v1", "k2": "v2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["k1": "v1", "k2": "v2"])
 
         MobileCore.registerExtensions([UserProfile.self]) {
             expectation.fulfill()
@@ -168,7 +176,7 @@ class UserProfileFunctionalTests: XCTestCase {
 
     func testRemoveUserAttributesWithEmptyDict() throws {
         let expectation = self.expectation(description: "register UserProfile extension")
-        UserDefaults.standard.set(["k1": "v1", "k2": "v2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["k1": "v1", "k2": "v2"])
 
         MobileCore.registerExtensions([UserProfile.self]) {
             expectation.fulfill()
@@ -182,13 +190,12 @@ class UserProfileFunctionalTests: XCTestCase {
             attributes, _ in
             expectGet.fulfill()
             XCTAssertEqual(["k1": "v1", "k2": "v2"], attributes as? [String: String])
-            MobileCore.unregisterExtension(UserProfile.self)
         }
         waitForExpectations(timeout: 2)
     }
 
     func testRulesConsequenceEventOperationWrite() throws {
-        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["key1": "value1", "key2": "value2"])
         let expectation = self.expectation(description: "register UserProfile extension")
 
         MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {
@@ -219,7 +226,7 @@ class UserProfileFunctionalTests: XCTestCase {
     }
 
     func testRulesConsequenceEventOperationDelete() throws {
-        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["key1": "value1", "key2": "value2"])
         let expectation = self.expectation(description: "register UserProfile extension")
 
         MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {
@@ -238,20 +245,17 @@ class UserProfileFunctionalTests: XCTestCase {
             }
             XCTAssertEqual(1, data.count)
             XCTAssertEqual(["key2": "value2"], data)
-            self.theExpectation?.fulfill()
             MonitorExtension.profileSharedStateReceiver = nil
+            self.theExpectation?.fulfill()
         }
         MobileCore.dispatch(event: event)
 
         waitForExpectations(timeout: 2)
-
-        MobileCore.unregisterExtension(UserProfile.self)
-        MobileCore.unregisterExtension(MonitorExtension.self)
     }
 
     func testRulesConsequenceEventBadData() throws {
         MonitorExtension.sharedStateChanged = 0
-        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["key1": "value1", "key2": "value2"])
         let expectation = self.expectation(description: "register UserProfile extension")
 
         MobileCore.registerExtensions([UserProfile.self, MonitorExtension.self]) {
@@ -265,11 +269,9 @@ class UserProfileFunctionalTests: XCTestCase {
         MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key1", "operation": "add"]] as [String: Any]]))
         MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key3", "operation": "write"]] as [String: Any]]))
         MobileCore.dispatch(event: Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["value": "value1", "operation": "delete"]] as [String: Any]]))
-        usleep(9000)
-        XCTAssertEqual(1, MonitorExtension.sharedStateChanged)
+        usleep(1000)
 
-        MobileCore.unregisterExtension(UserProfile.self)
-        MobileCore.unregisterExtension(MonitorExtension.self)
+        XCTAssertEqual(1, MonitorExtension.sharedStateChanged)
     }
 
     func testDataMigration() throws {
@@ -301,12 +303,11 @@ class UserProfileFunctionalTests: XCTestCase {
             _, error in
             expectGet.fulfill()
             XCTAssertEqual(AEPError.none, error)
-            let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: Any]
+            let storedAttributes = self.getAttributesInDatastore()
             XCTAssertEqual("aaa", storedAttributes?["a"] as? String)
             XCTAssertEqual(123, storedAttributes?["b"] as? Int)
             XCTAssertEqual([1, 2], storedAttributes?["c"] as? [Int])
             XCTAssertEqual(["a1": "xx", "a2": "yy"], storedAttributes?["d"] as? [String: String])
-            MobileCore.unregisterExtension(UserProfile.self)
             XCTAssertNil(UserDefaults.standard.object(forKey: "Adobe.ADBUserProfile.user_profile"))
         }
 
