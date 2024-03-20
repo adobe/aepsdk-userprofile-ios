@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 /*
  Copyright 2020 Adobe. All rights reserved.
@@ -24,7 +24,7 @@ let package = Package(
     ],
     targets: [
         .target(name: "AEPUserProfile",
-                dependencies: ["AEPCore"],
+                dependencies: [.product(name: "AEPCore", package: "aepsdk-core-ios")],                
                 path: "AEPUserProfile/Sources"),
     ]
 )
