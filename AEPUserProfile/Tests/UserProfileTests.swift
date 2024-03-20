@@ -11,14 +11,29 @@
  */
 
 @testable import AEPCore
+import AEPServices
+import AEPTestUtils
 @testable import AEPUserProfile
 import XCTest
 
 class UserProfileTests: XCTestCase {
     private var theExpectation: XCTestExpectation?
 
+    private let EXTENSION_NAME = "com.adobe.module.userProfile"
+    private let DATASTORE_KEY_ATTRIBUTES = "attributes"
+
+    private func setAttributesInDatastore(_ value: [String: Any]?) {
+        let dataStore = NamedCollectionDataStore(name: EXTENSION_NAME)
+        dataStore.set(key: DATASTORE_KEY_ATTRIBUTES, value: value)
+    }
+
+    private func getAttributesInDatastore() -> [String: Any]? {
+        let dataStore = NamedCollectionDataStore(name: EXTENSION_NAME)
+        return dataStore.getDictionary(key: DATASTORE_KEY_ATTRIBUTES) as? [String: Any]
+    }
+
     override func setUpWithError() throws {
-        UserDefaults.standard.removeObject(forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        NamedCollectionDataStore.clear()
     }
 
     override func tearDownWithError() throws {}
@@ -41,7 +56,7 @@ class UserProfileTests: XCTestCase {
     }
 
     func testHandlingExtensionOnRegisteredWithStoredAttributes() throws {
-        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["key1": "value1", "key2": "value2"])
         let runtime = TestableExtensionRuntime()
         let profile = UserProfile(runtime: runtime)
         profile.onRegistered()
@@ -68,7 +83,7 @@ class UserProfileTests: XCTestCase {
         }
         let event = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key3", "value": "value3", "operation": "write"]] as [String: Any]])
         handleRulesEngineResponse(event)
-        guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
+        guard let storedAttributes = getAttributesInDatastore() as? [String: String] else {
             XCTFail()
             return
         }
@@ -83,7 +98,7 @@ class UserProfileTests: XCTestCase {
     }
 
     func testHandleRulesEngineResponseForWriteWithEmptyStringValue() throws {
-        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["key1": "value1", "key2": "value2"])
         let runtime = TestableExtensionRuntime()
         let profile = UserProfile(runtime: runtime)
         profile.onRegistered()
@@ -95,7 +110,7 @@ class UserProfileTests: XCTestCase {
         }
         let event = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key1", "value": "", "operation": "write"]] as [String: Any]])
         handleRulesEngineResponse(event)
-        guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
+        guard let storedAttributes = getAttributesInDatastore() as? [String: String] else {
             XCTFail()
             return
         }
@@ -110,7 +125,7 @@ class UserProfileTests: XCTestCase {
     }
 
     func testHandleRulesEngineResponseForDelete() throws {
-        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["key1": "value1", "key2": "value2"])
         let runtime = TestableExtensionRuntime()
         let profile = UserProfile(runtime: runtime)
         profile.onRegistered()
@@ -120,7 +135,7 @@ class UserProfileTests: XCTestCase {
         }
         let event = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["type": "csp", "detail": ["key": "key1", "operation": "delete"]] as [String: Any]])
         handleRulesEngineResponse(event)
-        guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
+        guard let storedAttributes = getAttributesInDatastore() as? [String: String] else {
             XCTFail()
             return
         }
@@ -135,7 +150,7 @@ class UserProfileTests: XCTestCase {
     }
 
     func testHandleRulesEngineResponseBadFormat() throws {
-        UserDefaults.standard.set(["key1": "value1"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["key1": "value1"])
         let runtime = TestableExtensionRuntime()
         let profile = UserProfile(runtime: runtime)
         profile.onRegistered()
@@ -148,7 +163,7 @@ class UserProfileTests: XCTestCase {
         }
         let consequenceEventWithoutType = Event(name: "consequence event", type: "com.adobe.eventType.rulesEngine", source: "com.adobe.eventSource.responseContent", data: ["triggeredconsequence": ["detail": ["key": "key3", "value": "value3", "operation": "write"]]])
         handleRulesEngineResponse(consequenceEventWithoutType)
-        guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
+        guard let storedAttributes = getAttributesInDatastore() as? [String: String] else {
             XCTFail()
             return
         }
@@ -165,7 +180,7 @@ class UserProfileTests: XCTestCase {
     }
 
     func testUpdateAttributes() throws {
-        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["key1": "value1", "key2": "value2"])
         let runtime = TestableExtensionRuntime()
         let profile = UserProfile(runtime: runtime)
         profile.onRegistered()
@@ -179,7 +194,7 @@ class UserProfileTests: XCTestCase {
         let event = Event(name: "UserProfileUpdate", type: "com.adobe.eventType.userProfile", source: "com.adobe.eventSource.requestProfile", data: ["userprofileupdatekey": ["key1": "valuex", "key2": ""]])
         XCTAssert(event.isUpdateAttributesEvent)
         handleRequestProfile(event)
-        guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
+        guard let storedAttributes = getAttributesInDatastore() as? [String: String] else {
             XCTFail()
             return
         }
@@ -194,7 +209,7 @@ class UserProfileTests: XCTestCase {
     }
 
     func testUpdateAttributesWithEmptyStringValue() throws {
-        UserDefaults.standard.set(["key1": "value1"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["key1": "value1"])
         let runtime = TestableExtensionRuntime()
         let profile = UserProfile(runtime: runtime)
         profile.onRegistered()
@@ -208,7 +223,7 @@ class UserProfileTests: XCTestCase {
         let event = Event(name: "UserProfileUpdate", type: "com.adobe.eventType.userProfile", source: "com.adobe.eventSource.requestProfile", data: ["userprofileupdatekey": ["key2": "value2", "key3": "value3"]])
         XCTAssert(event.isUpdateAttributesEvent)
         handleRequestProfile(event)
-        guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
+        guard let storedAttributes = getAttributesInDatastore() as? [String: String] else {
             XCTFail()
             return
         }
@@ -223,7 +238,8 @@ class UserProfileTests: XCTestCase {
     }
 
     func testUpdateAttributesWithMultipleValueTypes() throws {
-        UserDefaults.standard.set(["k_string": "value1", "k_int": 2, "k_bool": true, "k_double": 2.1] as [String: Any], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["k_string": "value1", "k_int": 2, "k_bool": true, "k_double": 2.1])
+
         let runtime = TestableExtensionRuntime()
         let profile = UserProfile(runtime: runtime)
         profile.onRegistered()
@@ -237,7 +253,7 @@ class UserProfileTests: XCTestCase {
         let event = Event(name: "UserProfileUpdate", type: "com.adobe.eventType.userProfile", source: "com.adobe.eventSource.requestProfile", data: ["userprofileupdatekey": ["k_int": 3]])
         XCTAssert(event.isUpdateAttributesEvent)
         handleRequestProfile(event)
-        guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: Any] else {
+        guard let storedAttributes = getAttributesInDatastore() else {
             XCTFail()
             return
         }
@@ -260,7 +276,7 @@ class UserProfileTests: XCTestCase {
     }
 
     func testUpdateAttributesWithUnacceptedValue() throws {
-        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["key1": "value1", "key2": "value2"])
         let runtime = TestableExtensionRuntime()
         let profile = UserProfile(runtime: runtime)
         profile.onRegistered()
@@ -276,7 +292,7 @@ class UserProfileTests: XCTestCase {
 
         handleRequestProfile(event)
 
-        guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
+        guard let storedAttributes = getAttributesInDatastore() as? [String: String] else {
             XCTFail()
             return
         }
@@ -286,7 +302,7 @@ class UserProfileTests: XCTestCase {
     }
 
     func testGetAttributes() throws {
-        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["key1": "value1", "key2": "value2"])
         let runtime = TestableExtensionRuntime()
         let profile = UserProfile(runtime: runtime)
         profile.onRegistered()
@@ -310,7 +326,7 @@ class UserProfileTests: XCTestCase {
     }
 
     func testGetAttributesEmptyKey() throws {
-        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["key1": "value1", "key2": "value2"])
         let runtime = TestableExtensionRuntime()
         let profile = UserProfile(runtime: runtime)
         profile.onRegistered()
@@ -328,7 +344,7 @@ class UserProfileTests: XCTestCase {
     }
 
     func testRemoveAttributes() throws {
-        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["key1": "value1", "key2": "value2"])
         let runtime = TestableExtensionRuntime()
         let profile = UserProfile(runtime: runtime)
         profile.onRegistered()
@@ -341,7 +357,7 @@ class UserProfileTests: XCTestCase {
         }
         let event = Event(name: "RemoveUserProfiles", type: "com.adobe.eventType.userProfile", source: "com.adobe.eventSource.requestReset", data: ["userprofileremovekeys": ["key2", "key3"]])
         removeAttributes(event)
-        guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
+        guard let storedAttributes = getAttributesInDatastore() as? [String: String] else {
             XCTFail()
             return
         }
@@ -356,7 +372,7 @@ class UserProfileTests: XCTestCase {
     }
 
     func testRemoveAttributesKeyNotExist() throws {
-        UserDefaults.standard.set(["key1": "value1", "key2": "value2"], forKey: "Adobe.com.adobe.module.userProfile.attributes")
+        setAttributesInDatastore(["key1": "value1", "key2": "value2"])
         let runtime = TestableExtensionRuntime()
         let profile = UserProfile(runtime: runtime)
         profile.onRegistered()
@@ -369,7 +385,7 @@ class UserProfileTests: XCTestCase {
         }
         let event = Event(name: "RemoveUserProfiles", type: "com.adobe.eventType.userProfile", source: "com.adobe.eventSource.requestReset", data: ["userprofileremovekeys": ["key3"]])
         removeAttributes(event)
-        guard let storedAttributes = UserDefaults.standard.object(forKey: "Adobe.com.adobe.module.userProfile.attributes") as? [String: String] else {
+        guard let storedAttributes = getAttributesInDatastore() as? [String: String] else {
             XCTFail()
             return
         }

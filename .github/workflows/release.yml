@@ -16,7 +16,7 @@ on:
 
 jobs:
   release_profile:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
     - uses: actions/checkout@v2
       with:
@@ -24,10 +24,13 @@ jobs:
 
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: 14.1
+        xcode-version: 15.0.1
     
     - name: Install jq
       run: brew install jq
+
+    - name: Install xcodegen
+      run: brew install xcodegen
 
     - name: Check version in Podspec
       run: |
@@ -46,13 +49,12 @@ jobs:
         echo SPM integration test starts:
         make test-SPM-integration
 
-    - name: podspec file verification
+    - name: Podspec file verification
       if: ${{ github.event.inputs.action_tag == 'yes' }}
       run: |
         set -eo pipefail
         echo podspec file verification starts:
         make test-podspec
-
 
     - name: Build Artifact
       if: ${{ github.event.inputs.action_tag == 'yes' }}
@@ -87,9 +89,8 @@ jobs:
       run: |
         set -eo pipefail
         gem install cocoapods
-        pod lib lint AEPUserProfile.podspec --allow-warnings --swift-version=5.1
-        pod trunk push AEPUserProfile.podspec --allow-warnings --swift-version=5.1
+        pod lib lint AEPUserProfile.podspec --allow-warnings
+        pod trunk push AEPUserProfile.podspec --allow-warnings 
       env:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-        
         
