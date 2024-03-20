@@ -29,6 +29,9 @@ jobs:
     - name: Install jq
       run: brew install jq
 
+    - name: Install xcodegen
+      run: brew install xcodegen
+
     - name: Check version in Podspec
       run: |
         set -eo pipefail
@@ -46,13 +49,12 @@ jobs:
         echo SPM integration test starts:
         make test-SPM-integration
 
-    - name: podspec file verification
+    - name: Podspec file verification
       if: ${{ github.event.inputs.action_tag == 'yes' }}
       run: |
         set -eo pipefail
         echo podspec file verification starts:
         make test-podspec
-
 
     - name: Build Artifact
       if: ${{ github.event.inputs.action_tag == 'yes' }}
@@ -91,5 +93,4 @@ jobs:
         pod trunk push AEPUserProfile.podspec --allow-warnings 
       env:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-        
         
