@@ -28,3 +28,7 @@ target 'AEPUserProfileE2ETests' do
   pod 'AEPRulesEngine'
   pod 'AEPTestUtils', :git => 'https://github.com/adobe/aepsdk-testutils-ios.git', :tag => '5.0.0'
 end
+
+target 'TestApp' do
+  pod 'AEPCore'
+end 

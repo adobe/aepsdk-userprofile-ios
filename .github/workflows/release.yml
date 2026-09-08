@@ -33,10 +33,12 @@ jobs:
       run: brew install xcodegen
 
     - name: Check version in Podspec
+      env:
+        TAG_VERSION: ${{ github.event.inputs.tag }}
       run: |
         set -eo pipefail
-        echo Target version: ${{ github.event.inputs.tag }}
-        make check-version VERSION=${{ github.event.inputs.tag }}
+        echo "Target version: $TAG_VERSION"
+        make check-version VERSION="$TAG_VERSION"
     
     - name: Pod repo update
       run: | 

@@ -37,10 +37,9 @@ jobs:
       run: make test
 
     - name: Upload Code Coverage 
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         verbose: true
-        name: aep-user-profile-ios
-        move_coverage_to_trash: true
+        name: aep-user-profile-ios        
 
        
