@@ -15,14 +15,14 @@ on:
 jobs:
   build:
 
-    runs-on: macos-13
+    runs-on: xcode-27
 
     steps:
     - uses: actions/checkout@v2
 
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: 15.0.1
+        xcode-version: '27.0'
         
     - name: Install swiftformat
       run: brew install swiftformat
@@ -33,6 +33,12 @@ jobs:
     - name: Linting
       run: make lint; make check-format
 
+    - name: Preboot iOS simulator
+      run: |
+        UDID=$(xcrun simctl list devices "iOS 27.0" available | grep -m1 -E "^ +iPhone 18 Pro \(" | grep -oE "[0-9A-F-]{36}")
+        xcrun simctl boot "$UDID"
+        xcrun simctl bootstatus "$UDID"
+
     - name: Run tests
       run: make test
 
@@ -40,6 +46,4 @@ jobs:
       uses: codecov/codecov-action@v4
       with:
         verbose: true
-        name: aep-user-profile-ios        
-
-       
+        name: aep-user-profile-ios

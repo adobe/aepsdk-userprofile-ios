@@ -16,6 +16,8 @@ import AEPTestUtils
 @testable import AEPUserProfile
 import XCTest
 
+// waitForExpectations is main actor only in Swift 6, so the tests run on the main actor like XCTest already does.
+@MainActor
 class UserProfileFunctionalTests: XCTestCase {
     private var theExpectation: XCTestExpectation?
 
@@ -27,9 +29,10 @@ class UserProfileFunctionalTests: XCTestCase {
         dataStore.set(key: DATASTORE_KEY_ATTRIBUTES, value: value)
     }
 
-    private func getAttributesInDatastore() -> [String: Any]? {
-        let dataStore = NamedCollectionDataStore(name: EXTENSION_NAME)
-        return dataStore.getDictionary(key: DATASTORE_KEY_ATTRIBUTES) as? [String: Any]
+    // SDK callbacks run off the main actor, so this helper is static and nonisolated to avoid capturing self.
+    private nonisolated static func getAttributesInDatastore() -> [String: Any]? {
+        let dataStore = NamedCollectionDataStore(name: "com.adobe.module.userProfile")
+        return dataStore.getDictionary(key: "attributes") as? [String: Any]
     }
 
     override func setUpWithError() throws {
@@ -125,7 +128,7 @@ class UserProfileFunctionalTests: XCTestCase {
         UserProfile.getUserAttributes(attributeNames: ["k1"]) {
             attributes, _ in
             XCTAssertEqual(["k1": "v1"], attributes as? [String: String])
-            XCTAssertEqual(["k1": "v1"], self.getAttributesInDatastore() as? [String: String])
+            XCTAssertEqual(["k1": "v1"], Self.getAttributesInDatastore() as? [String: String])
             expectGet.fulfill()
         }
         waitForExpectations(timeout: 2)
@@ -146,7 +149,7 @@ class UserProfileFunctionalTests: XCTestCase {
         UserProfile.getUserAttributes(attributeNames: []) {
             _, error in
             XCTAssertEqual(AEPError.none, error)
-            XCTAssertEqual(["k1": "v1", "k2": "v2"], self.getAttributesInDatastore() as? [String: String])
+            XCTAssertEqual(["k1": "v1", "k2": "v2"], Self.getAttributesInDatastore() as? [String: String])
             expectGet.fulfill()
         }
 
@@ -303,7 +306,7 @@ class UserProfileFunctionalTests: XCTestCase {
             _, error in
             expectGet.fulfill()
             XCTAssertEqual(AEPError.none, error)
-            let storedAttributes = self.getAttributesInDatastore()
+            let storedAttributes = Self.getAttributesInDatastore()
             XCTAssertEqual("aaa", storedAttributes?["a"] as? String)
             XCTAssertEqual(123, storedAttributes?["b"] as? Int)
             XCTAssertEqual([1, 2], storedAttributes?["c"] as? [Int])
@@ -318,25 +321,26 @@ class UserProfileFunctionalTests: XCTestCase {
 
 @objc(MonitorExtension)
 public class MonitorExtension: NSObject, Extension {
-    public static var instance: MonitorExtension?
+    // Swift 6 flags these shared test statics as unsafe. Tests set and read them in sequence, so we mark them nonisolated(unsafe).
+    nonisolated(unsafe) public static var instance: MonitorExtension?
 
-    public static var sharedStateChanged = 0
+    nonisolated(unsafe) public static var sharedStateChanged = 0
 
-    public static var profileResponseEventCounts = 0
+    nonisolated(unsafe) public static var profileResponseEventCounts = 0
 
     public var name: String = "MonitorExtension"
 
     public var friendlyName: String = "Monitor Extension"
 
-    public static var extensionVersion: String = "0.0.1"
+    nonisolated(unsafe) public static var extensionVersion: String = "0.0.1"
 
     public var metadata: [String: String]?
 
     public var runtime: ExtensionRuntime
 
-    public static var profileSharedStateReceiver: ((Event) -> Void)?
+    nonisolated(unsafe) public static var profileSharedStateReceiver: ((Event) -> Void)?
 
-    public static var profileResponseEventReceiver: (([String: String]) -> Void)?
+    nonisolated(unsafe) public static var profileResponseEventReceiver: (([String: String]) -> Void)?
 
     public func onRegistered() {
         MonitorExtension.instance = self

@@ -109,16 +109,18 @@ struct ContentView: View {
     }
 
     private func getProfileAttributes() {
-            UserProfile.getUserAttributes(attributeNames: [profileKey]) { attributes, error in
+            let key = profileKey
+            UserProfile.getUserAttributes(attributeNames: [key]) { attributes, error in
+                let message: String
                 if error != .none {
-                    profileResult = "Error \(error) fetching profile attribute for `\(profileKey)`"
+                    message = "Error \(error) fetching profile attribute for `\(key)`"
+                } else if let attribute = attributes?[key] as? String {
+                    message = "Profile attribute for `\(key)` is   `\(attribute)`"
                 } else {
-                    if let attribute = attributes?[profileKey] as? String {
-                        profileResult = "Profile attribute for `\(profileKey)` is   `\(attribute)`"
-                    } else {
-                        profileResult = "No attribute found for `\(profileKey)`"
-                    }
+                    message = "No attribute found for `\(key)`"
                 }
+                // SDK callbacks run on a background queue so UI state is updated on main.
+                DispatchQueue.main.async { profileResult = message }
             }
         }
 }

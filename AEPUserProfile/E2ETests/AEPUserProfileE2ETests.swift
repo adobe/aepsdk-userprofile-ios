@@ -37,6 +37,7 @@ class AEPUserProfileE2ETests: XCTestCase {
             expectation.fulfill()
             XCTAssertNotNil(result?["key_consequence"])
         }
-        waitForExpectations(timeout: 2)
+        // waitForExpectations is main actor only in Swift 6. wait(for:timeout:) is nonisolated so it can be called from this test.
+        wait(for: [expectation], timeout: 2)
     }
 }

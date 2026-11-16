@@ -50,7 +50,8 @@ import Foundation
     /// - Parameters:
     ///   - attributeNames: Attribute keys/names which will be used to retrieve user attributes
     ///   - completion: the callback `closure` which will be called with user attributes
-    static func getUserAttributes(attributeNames: [String], completion: @escaping ([String: Any]?, AEPError) -> Void) {
+    @preconcurrency static func getUserAttributes(attributeNames: [String], completion: @escaping @Sendable ([String: Any]?, AEPError) -> Void) {
+        // Completion runs on the SDK queue. Sendable tells Swift 6 apps not to assume main actor, and preconcurrency keeps old callers compiling.
         guard !attributeNames.isEmpty else {
             Log.trace(label: LOG_TAG, "getUserAttributes - no name provided, no event was dispatched")
             completion(nil, .none)
