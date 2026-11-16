@@ -475,6 +475,9 @@ public class TestableExtensionRuntime: ExtensionRuntime {
 
     public func getHistoricalEvents(_: [EventHistoryRequest], enforceOrder _: Bool, handler _: @escaping ([EventHistoryResult]) -> Void) {}
 
+    // Newer AEPCore versions added this requirement to ExtensionRuntime. The mock ignores it because these tests do not record history.
+    public func recordHistoricalEvent(_: Event, handler _: ((Bool) -> Void)?) {}
+
     public func getXDMSharedState(extensionName _: String, event _: Event?, barrier _: Bool) -> SharedStateResult? {
         nil
     }
