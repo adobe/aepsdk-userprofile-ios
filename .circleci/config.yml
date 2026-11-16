@@ -1,0 +1,99 @@
+#
+# Copyright 2026 Adobe. All rights reserved.
+# This file is licensed to you under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License. You may obtain a copy
+# of the License at http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+# OF ANY KIND, either express or implied. See the License for the specific language
+# governing permissions and limitations under the License.
+#
+
+version: 2.1
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - validate-code
+      - build-swift6:
+          requires:
+            - validate-code
+      - build-min-toolchain:
+          requires:
+            - validate-code
+
+commands:
+  install_dependencies:
+    steps:
+      - restore_cache:
+          name: Restore CocoaPods cache
+          keys:
+            - pods-v1-{{ checksum "Podfile.lock" }}
+            - pods-v1-
+
+      - run:
+          name: Install CocoaPods
+          command: make pod-install
+
+      - save_cache:
+          name: Save CocoaPods cache
+          key: pods-v1-{{ checksum "Podfile.lock" }}
+          paths:
+            - Pods
+            - ~/.cocoapods
+
+jobs:
+  validate-code:
+    resource_class: m4pro.medium
+    macos:
+      xcode: 27.0.0
+
+    steps:
+      - checkout
+      - install_dependencies
+      - run:
+          name: Lint Source Code
+          command: make lint
+
+  # Swift 6 language-mode coverage. Selecting Xcode 27 does not select Swift 6
+  # mode (checked-in targets are SWIFT_VERSION = 5.0), so this lane builds the
+  # AEPUserProfile target in Swift 6 via AEPUSERPROFILE_SWIFT_VERSION (referenced
+  # only by that target), then compiles a Swift 6 consumer that calls the public
+  # completion-handler API with plain closures from @MainActor code. Dependencies
+  # keep their own declared language modes (matching a real Swift 6 app), so this
+  # does not force unreleased dependencies into Swift 6. This continuously protects
+  # the @Sendable / @preconcurrency boundary on getUserAttributes.
+  # The full Swift 6 consumer *runtime* probe lands with the dependency-minimum
+  # bump, once the fixed @Sendable AEPCore release is published.
+  build-swift6:
+    resource_class: m4pro.medium
+    macos:
+      xcode: 27.0.0
+
+    steps:
+      - checkout
+      - install_dependencies
+      - run:
+          name: Build AEPUserProfile in Swift 6 language mode (dependencies keep their modes)
+          command: make build-swift6
+      - run:
+          name: Build Swift 6 consumer (plain closures from @MainActor)
+          command: make test-swift6-consumer
+
+  # Minimum-supported-toolchain coverage. README advertises Xcode 15.3+ / Swift
+  # 5.10 as the floor; 15.4 is the oldest 15.x image CircleCI still hosts and
+  # ships the same Swift 5.10 compiler. Compile-only (no iOS 27 runtime) to catch
+  # accidental use of APIs/features newer than the advertised minimum.
+  build-min-toolchain:
+    resource_class: m4pro.medium
+    macos:
+      xcode: 15.4.0
+
+    steps:
+      - checkout
+      - install_dependencies
+      - run:
+          name: Build SDK on minimum supported toolchain (Xcode 15.4 / Swift 5.10)
+          command: make build-min-toolchain
