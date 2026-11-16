@@ -15,14 +15,14 @@ on:
 jobs:
   build:
 
-    runs-on: macos-14
+    runs-on: xcode-27
 
     steps:
     - uses: actions/checkout@v2
 
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: 15.4
+        xcode-version: '27.0'
         
     - name: Install swiftformat
       run: brew install swiftformat
@@ -40,6 +40,24 @@ jobs:
       uses: codecov/codecov-action@v4
       with:
         verbose: true
-        name: aep-user-profile-ios        
+        name: aep-user-profile-ios
 
-       
+  build-swift6:
+    needs: build
+    runs-on: xcode-27
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '27.0'
+
+    - name: pod install
+      run: make pod-install
+
+    - name: Build AEPUserProfile in Swift 6 language mode (dependencies keep their modes)
+      run: make build-swift6
+
+    - name: Build Swift 6 consumer (plain closures from @MainActor)
+      run: make test-swift6-consumer
