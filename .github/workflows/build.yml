@@ -33,6 +33,12 @@ jobs:
     - name: Linting
       run: make lint; make check-format
 
+    - name: Preboot iOS simulator
+      run: |
+        UDID=$(xcrun simctl list devices "iOS 27.0" available | grep -m1 -E "^ +iPhone 18 Pro \(" | grep -oE "[0-9A-F-]{36}")
+        xcrun simctl boot "$UDID"
+        xcrun simctl bootstatus "$UDID"
+
     - name: Run tests
       run: make test
 
