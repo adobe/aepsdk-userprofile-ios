@@ -12,8 +12,8 @@ The Adobe Experience Platform UserProfile Mobile Extension is an extension for t
 To learn more about this extension, read [Adobe Experience Platform Profile Mobile Extension](https://aep-sdks.gitbook.io/docs/v/AEP-Edge-Docs/).
 
 ## Requirements
-- Xcode 15 (or newer)
-- Swift 5.1 (or newer)
+- Xcode 15.3 (or newer)
+- Swift 5.10 (or newer)
 
 ## Installation
 

@@ -83,4 +83,4 @@ test-podspec:
 	(sh ./script/test-podspec.sh)
 
 pod-lint:
-	(pod lib lint --allow-warnings --verbose --swift-version=5.1)
+	(pod lib lint --allow-warnings --verbose --swift-version=5.10)
