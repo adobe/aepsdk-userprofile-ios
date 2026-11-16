@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.author           = "Adobe Experience Platform SDK Team"
   s.source           = { :git => "https://github.com/adobe/aepsdk-userprofile-ios", :tag => s.version.to_s }
 
-  s.ios.deployment_target = '12.0'
+  s.ios.deployment_target = '15.0'
   s.swift_version    = '5.1'
   s.pod_target_xcconfig = { 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES' }
   s.dependency 'AEPCore', '>= 5.0.0', '< 6.0.0'
